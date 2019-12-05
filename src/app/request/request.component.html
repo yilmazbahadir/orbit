@@ -1,0 +1,41 @@
+<form #form="ngForm">
+  <mat-form-field fxFill>
+    <mat-label>PubKey Type</mat-label>
+    <input
+      matInput
+      readonly
+      name="pubkey-type"
+      [(ngModel)]="request.pubKey.type"
+    />
+  </mat-form-field>
+  <mat-form-field fxFill>
+    <mat-label>PubKey Value</mat-label>
+    <input
+      matInput
+      readonly
+      name="pubkey-value"
+      [(ngModel)]="request.pubKey.value"
+    />
+  </mat-form-field>
+  <mat-form-field fxFill appearance="outline">
+    <mat-label>StdTx</mat-label>
+    <textarea
+      matInput
+      readonly
+      name="std-tx"
+      [(ngModel)]="request.stdTxJSONString"
+    ></textarea>
+  </mat-form-field>
+  <div fxLayout="row wrap" fxLayoutGap="16px grid">
+    <div fxFlex="50">
+      <button mat-stroked-button fxFill type="button" (click)="reject()">
+        Reject
+      </button>
+    </div>
+    <div fxFlex="50">
+      <button mat-flat-button fxFill color="accent" (click)="confirm()">
+        Confirm
+      </button>
+    </div>
+  </div>
+</form>

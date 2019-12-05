@@ -9,13 +9,20 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
 import { MatToolbarModule } from "@angular/material/toolbar";
 
 import { HomeComponent } from "./home/home.component";
-import { AnnounceComponent } from './announce/announce.component';
+import { BackgroundComponent } from "./background/background.component";
+import { RequestComponent } from "./request/request.component";
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, AnnounceComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    BackgroundComponent,
+    RequestComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -25,6 +32,7 @@ import { AnnounceComponent } from './announce/announce.component';
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     MatToolbarModule
   ],
   providers: [],

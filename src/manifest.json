@@ -2,7 +2,6 @@
   "name": "Orbit",
   "manifest_version": 2,
   "version": "1.0",
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "browser_action": {
     "default_icon": "favicon.ico",
     "default_popup": "index.html"
@@ -22,7 +21,7 @@
     }
   ],
   "background": {
-    "scripts": ["chrome/lib/background.js"]
+    "page": "index.html#/background"
   },
   "permissions": [
     "storage",
@@ -30,5 +29,13 @@
   ],
   "web_accessible_resources": [
     "chrome/lib/injection.js"
-  ]
+  ],
+  "externally_connectable": {
+    "matches": [
+      "https://www.google.com/*"
+    ],
+    "ids": [
+      "*"
+    ]
+  }
 }

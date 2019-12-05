@@ -1,11 +1,13 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { HomeComponent } from "./home/home.component";
-import { AnnounceComponent } from "./announce/announce.component";
+import { RequestComponent } from './request/request.component';
+import { BackgroundComponent } from './background/background.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
-  { path: "announce", component: AnnounceComponent }
+  { path: "request", component: RequestComponent },
+  { path: "background", component: BackgroundComponent }
 ];
 
 @NgModule({
