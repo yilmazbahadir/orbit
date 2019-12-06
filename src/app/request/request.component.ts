@@ -1,9 +1,9 @@
-import { Component, OnInit, KeyValueDiffers, KeyValueDiffer } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 
 @Component({
-  selector: 'app-request',
-  templateUrl: './request.component.html',
-  styleUrls: ['./request.component.css']
+  selector: "app-request",
+  templateUrl: "./request.component.html",
+  styleUrls: ["./request.component.css"]
 })
 export class RequestComponent implements OnInit {
   request: {
@@ -14,9 +14,15 @@ export class RequestComponent implements OnInit {
     stdTxJSONString: string;
     callback(response: boolean): void;
   };
-  differ: KeyValueDiffer<any, any>;
 
-  constructor(private kvd: KeyValueDiffers) {
+  forms: {
+    memo: string;
+  };
+
+  @ViewChild("memo", { static: true })
+  memo?: ElementRef;
+
+  constructor() {
     this.request = {
       pubKey: {
         type: "",
@@ -25,15 +31,16 @@ export class RequestComponent implements OnInit {
       stdTxJSONString: "",
       callback: (reponse: boolean) => {}
     };
-
-    this.differ = this.kvd.find(this.request).create()
+    this.forms = {
+      memo: ""
+    };
   }
 
   ngOnInit() {
     chrome.tabs.getCurrent(tab => {
       const background: any = chrome.extension.getBackgroundPage();
       this.request = background.window.orbit.requestsMap[tab!.id!];
-      this.differ.diff(this.request);
+      this.memo!.nativeElement.focus();
     });
   }
 

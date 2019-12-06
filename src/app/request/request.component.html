@@ -26,6 +26,15 @@
       [(ngModel)]="request.stdTxJSONString"
     ></textarea>
   </mat-form-field>
+  <mat-form-field fxFill>
+    <mat-label>Memo</mat-label>
+    <input
+      matInput
+      name="memo"
+      [(ngModel)]="forms.memo"
+      #memo
+    />
+  </mat-form-field>
   <div fxLayout="row wrap" fxLayoutGap="16px grid">
     <div fxFlex="50">
       <button mat-stroked-button fxFill type="button" (click)="reject()">

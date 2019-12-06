@@ -10,12 +10,17 @@ try {
 }
 
 window.addEventListener("message", event => {
-  const _window: any = event.source;
   switch (event.data.type) {
     case "GET_PUBKEY":
     case "POST_STDTX":
       chrome.runtime.sendMessage(event.data, response => {
-        _window.orbit.contentScriptCallback(response);
+        window.postMessage(
+          {
+            type: "CALLBACK",
+            value: response
+          },
+          "*"
+        );
       });
       break;
   }

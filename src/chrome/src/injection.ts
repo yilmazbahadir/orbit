@@ -69,3 +69,11 @@
     });
   }
 };
+
+window.addEventListener("message", event => {
+  switch (event.data.type) {
+    case "CALLBACK":
+      (window as any).orbit.contentScriptCallback(event.data.value);
+      break;
+  }
+});

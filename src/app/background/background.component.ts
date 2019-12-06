@@ -38,7 +38,7 @@ export class BackgroundComponent implements OnInit {
                     });
                     return;
                   }
-                  this.sign().then(value => {
+                  this.sign(request.value.stdTxJSONString).then(value => {
                     sendResponse({
                       id: request.id,
                       value: value
@@ -62,8 +62,8 @@ export class BackgroundComponent implements OnInit {
     };
   }
 
-  async sign(): Promise<any> {
-    return {};
+  async sign(stdTxJSONString: string): Promise<string> {
+    return stdTxJSONString;
   }
 }
 
