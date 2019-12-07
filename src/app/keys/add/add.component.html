@@ -1,0 +1,94 @@
+<div fxLayout="row">
+  <span class="fill-remaining-space"></span>
+  <button mat-icon-button color="accent" routerLink="/">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<form #form="ngForm" (submit)="submit()">
+  <mat-form-field fxFill>
+    <mat-label>Mnemonic</mat-label>
+    <textarea
+      matInput
+      required
+      name="mnemonic"
+      pattern="^[a-z\s]+$"
+      [(ngModel)]="forms.mnemonic"
+    ></textarea>
+  </mat-form-field>
+  <mat-form-field fxFill>
+    <mat-label>Coin Type</mat-label>
+    <mat-select
+      required
+      name="coin-type"
+      [(ngModel)]="forms.coinType"
+      (change)="coinTypeChange($event.target.value)"
+    >
+      <mat-option [value]="0">Bitcoin ($BTC)</mat-option>
+      <mat-option [value]="1">All Testnets</mat-option>
+      <mat-option [value]="118">Cosmos ($ATOM)</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field fxFill>
+    <mat-label>Account</mat-label>
+    <mat-slider
+      [min]="0"
+      [max]="99"
+      name="account"
+      [(ngModel)]="forms.account"
+    ></mat-slider>
+  </mat-form-field>
+  <mat-form-field fxFill>
+    <mat-label>Change</mat-label>
+    <mat-select required name="change" [(ngModel)]="forms.change">
+      <mat-option [value]="0">External chain</mat-option>
+      <mat-option [value]="1">Internal chain</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field fxFill>
+    <mat-label>Address Index</mat-label>
+    <mat-slider
+      [min]="0"
+      [max]="99"
+      name="address-index"
+      [(ngModel)]="forms.addressIndex"
+    ></mat-slider>
+  </mat-form-field>
+  <mat-form-field fxFill>
+    <mat-label>Hash Type</mat-label>
+    <mat-select required name="hash-type" [(ngModel)]="forms.hashType">
+      <ng-container *ngFor="let type of hashTypes$ | async">
+        <mat-option [value]="type">{{ type }}</mat-option>
+      </ng-container></mat-select
+    >
+  </mat-form-field>
+  <mat-form-field fxFill>
+    <mat-label>Signature Type</mat-label>
+    <mat-select required name="hash-type" [(ngModel)]="forms.signatureType">
+      <ng-container *ngFor="let type of signatureTypes$ | async">
+        <mat-option [value]="type">{{ type }}</mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Password (Optional)</mat-label>
+    <input
+      matInput
+      type="{{ forms.isPasswordVisible ? 'text' : 'password' }}"
+      name="password"
+      [(ngModel)]="forms.password"
+    />
+    <button
+      mat-button
+      matSuffix
+      type="button"
+      (click)="forms.isPasswordVisible = !forms.isPasswordVisible"
+    >
+      <mat-icon>
+        {{ forms.isPasswordVisible ? "visibility_off" : "visibility" }}
+      </mat-icon>
+    </button>
+  </mat-form-field>
+  <button mat-stroked-button fxFill color="accent" [disabled]="form.invalid">
+    Generate Private Key
+  </button>
+</form>

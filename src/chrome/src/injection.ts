@@ -1,3 +1,5 @@
+import { Key } from "../../types/key";
+
 (window as any).orbit = {
   contentScriptQueue: {} as {
     [id: string]: {
@@ -28,12 +30,12 @@
 };
 
 (window as any).cosmos = {
-  getPubKey(): Promise<{ type: string; value: Buffer }> {
+  getKeys(): Promise<Key[]> {
     const id = (window as any).orbit.getRandomId();
     window.postMessage(
       {
         id,
-        type: "GET_PUBKEY"
+        type: "GET_KEYS"
       },
       "*"
     );
@@ -45,18 +47,15 @@
     });
   },
 
-  requestSignature(
-    pubKey: { type: string; value: string },
-    stdTxJSONString: string
-  ): Promise<any> {
+  requestSignature(keyName: string, dataHexString: string): Promise<any> {
     const id = (window as any).orbit.getRandomId();
     window.postMessage(
       {
         id,
-        type: "POST_STDTX",
+        type: "REQUEST_SIGNATURE",
         value: {
-          pubKey,
-          stdTxJSONString
+          keyName,
+          dataHexString
         }
       },
       "*"

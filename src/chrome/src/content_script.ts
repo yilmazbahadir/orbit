@@ -11,8 +11,8 @@ try {
 
 window.addEventListener("message", event => {
   switch (event.data.type) {
-    case "GET_PUBKEY":
-    case "POST_STDTX":
+    case "GET_KEYS":
+    case "REQUEST_SIGNATURE":
       chrome.runtime.sendMessage(event.data, response => {
         window.postMessage(
           {

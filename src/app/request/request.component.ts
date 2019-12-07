@@ -1,4 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { Request } from "../../types/request";
+import { KeyService } from "../core/services/key.service";
+import { HashTypes } from "../../types/key";
+import { HashService } from '../core/services/hash.service';
 
 @Component({
   selector: "app-request",
@@ -6,41 +10,37 @@ import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
   styleUrls: ["./request.component.css"]
 })
 export class RequestComponent implements OnInit {
-  request: {
-    pubKey: {
-      type: string;
-      value: string;
-    };
-    stdTxJSONString: string;
-    callback(response: boolean): void;
-  };
-
   forms: {
-    memo: string;
+    password: string;
   };
+  request: Request;
 
-  @ViewChild("memo", { static: true })
-  memo?: ElementRef;
+  keyName: string;
+  keyHashType: HashTypes;
+  keyHashedPassword?: string;
 
-  constructor() {
+  constructor(private key: KeyService, private hash: HashService) {
+    this.forms = {
+      password: ""
+    };
     this.request = {
-      pubKey: {
-        type: "",
-        value: ""
-      },
-      stdTxJSONString: "",
+      keyID: "",
+      dataHexString: "",
       callback: (reponse: boolean) => {}
     };
-    this.forms = {
-      memo: ""
-    };
+    this.keyName = "";
+    this.keyHashType = HashTypes.SHA256;
   }
 
   ngOnInit() {
     chrome.tabs.getCurrent(tab => {
       const background: any = chrome.extension.getBackgroundPage();
       this.request = background.window.orbit.requestsMap[tab!.id!];
-      this.memo!.nativeElement.focus();
+      this.key.get(this.request.keyID).then(key => {
+        this.keyName = key.name;
+        this.keyHashType = key.hash_type
+        this.keyHashedPassword = key.hashed_password;
+      });
     });
   }
 
@@ -49,6 +49,14 @@ export class RequestComponent implements OnInit {
   }
 
   confirm() {
+    if(this.keyHashedPassword) {
+      const passwordHexString = new Buffer(this.forms.password).toString("hex")
+      const hash = this.hash.hash(passwordHexString, this.keyHashType)
+      if(hash !== this.keyHashedPassword) {
+        return;
+      }
+    }
+    
     this.request.callback(true);
   }
 }

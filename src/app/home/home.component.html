@@ -1,2 +1,18 @@
-<button mat-button fxFill>秘密鍵を作成</button>
-<button mat-button fxFill>秘密鍵をインポート</button>
+<ng-container *ngIf="keys$ | async as keys">
+  <div fxLayout="row">
+    <span class="fill-remaining-space"></span>
+    <button mat-icon-button color="accent" routerLink="/keys/add">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <ng-container *ngIf="keys.length === 0; else divider">
+    <p class="empty">There is no key.</p>
+  </ng-container>
+  <ng-template #divider>
+    <mat-divider></mat-divider>
+  </ng-template>
+  <ng-container *ngFor="let key of keys">
+    <div class="icon" [ngClass]="{ color: getColorCode(key) }"></div>
+    <mat-divider></mat-divider>
+  </ng-container>
+</ng-container>

@@ -1,38 +1,15 @@
-<form #form="ngForm">
+<p>{{ keyName }}による署名に同意しますか？</p>
+<pre>
+  {{ request.dataHexString }}
+</pre>
+<form #form="ngForm" (submit)="confirm()">
   <mat-form-field fxFill>
-    <mat-label>PubKey Type</mat-label>
+    <mat-label>Password</mat-label>
     <input
       matInput
-      readonly
-      name="pubkey-type"
-      [(ngModel)]="request.pubKey.type"
-    />
-  </mat-form-field>
-  <mat-form-field fxFill>
-    <mat-label>PubKey Value</mat-label>
-    <input
-      matInput
-      readonly
-      name="pubkey-value"
-      [(ngModel)]="request.pubKey.value"
-    />
-  </mat-form-field>
-  <mat-form-field fxFill appearance="outline">
-    <mat-label>StdTx</mat-label>
-    <textarea
-      matInput
-      readonly
-      name="std-tx"
-      [(ngModel)]="request.stdTxJSONString"
-    ></textarea>
-  </mat-form-field>
-  <mat-form-field fxFill>
-    <mat-label>Memo</mat-label>
-    <input
-      matInput
-      name="memo"
-      [(ngModel)]="forms.memo"
-      #memo
+      type="password"
+      name="password"
+      [(ngModel)]="forms.password"
     />
   </mat-form-field>
   <div fxLayout="row wrap" fxLayoutGap="16px grid">
@@ -42,7 +19,7 @@
       </button>
     </div>
     <div fxFlex="50">
-      <button mat-flat-button fxFill color="accent" (click)="confirm()">
+      <button mat-flat-button fxFill color="accent">
         Confirm
       </button>
     </div>

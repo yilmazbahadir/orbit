@@ -1,0 +1,46 @@
+<div fxLayout="row">
+  <span class="fill-remaining-space"></span>
+  <button mat-icon-button color="accent" routerLink="/">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<ng-container *ngIf="key$ | async as key">
+  <mat-list>
+    <h3 matSubheader>{{ key.name }}</h3>
+    <mat-list-item>
+      <span>Coin Type</span>
+      <span class="fill-remaining-space"></span>
+      <span>{{ key.coin_type }}</span>
+    </mat-list-item>
+    <mat-list-item>
+      <span>Account</span>
+      <span class="fill-remaining-space"></span>
+      <span>{{ key.account }}</span>
+    </mat-list-item>
+    <mat-list-item>
+      <span>Change</span>
+      <span class="fill-remaining-space"></span>
+      <span>{{ key.change === 0 ? "External Chain" : "Internal Chain" }}</span>
+    </mat-list-item>
+    <mat-list-item>
+      <span>Address Index</span>
+      <span class="fill-remaining-space"></span>
+      <span>{{ key.address_index }}</span>
+    </mat-list-item>
+    <mat-list-item>
+      <span>Public Key</span>
+      <span class="fill-remaining-space"></span>
+      <span>{{ key.public_key }}</span>
+    </mat-list-item>
+    <mat-list-item>
+      <span>Hash Type</span>
+      <span class="fill-remaining-space"></span>
+      <span>{{ key.hash_type }}</span>
+    </mat-list-item>
+    <mat-list-item>
+      <span>Signature Type</span>
+      <span class="fill-remaining-space"></span>
+      <span>{{ key.signature_type }}</span>
+    </mat-list-item>
+  </mat-list>
+</ng-container>
