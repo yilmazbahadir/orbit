@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Key, HashTypes, SignatureTypes } from "../../../types/key";
+import { HashTypes, SignatureTypes } from "../../../types/key";
 import { KeyService } from "../../core/services/key.service";
 import * as bip39 from "bip39";
 
@@ -44,14 +44,16 @@ export class AddComponent implements OnInit {
 
   async submit() {
     await this.key.create(
-      this.forms.id,
-      this.forms.mnemonic,
-      this.forms.coinType,
-      this.forms.account,
-      this.forms.change,
-      this.forms.addressIndex,
-      this.forms.hashType,
-      this.forms.signatureType,
+      {
+        id: this.forms.id,
+        mnemonic: this.forms.mnemonic,
+        coin_type: this.forms.coinType,
+        account: this.forms.account,
+        change: this.forms.change,
+        address_index: this.forms.addressIndex,
+        hash_type: this.forms.hashType,
+        signature_type: this.forms.signatureType
+      },
       this.forms.password
     );
   }

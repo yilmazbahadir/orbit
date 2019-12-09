@@ -64,14 +64,14 @@ function getRandomId() {
     });
   },
 
-  requestSignature(keyName: string, dataHexString: string): Promise<any> {
+  requestSignature(keyID: string, dataHexString: string): Promise<any> {
     const id = getRandomId();
     window.postMessage(
       {
         id,
         type: "REQUEST_SIGNATURE",
         value: {
-          keyName,
+          keyID,
           dataHexString
         }
       },

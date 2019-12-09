@@ -9,10 +9,10 @@ import { from, Observable } from "rxjs";
   styleUrls: ["./home.component.css"]
 })
 export class HomeComponent implements OnInit {
-  keys$: Observable<Key[]>;
+  keys$: Promise<Key[]>;
 
   constructor(private key: KeyService) {
-    this.keys$ = from(this.key.all());
+    this.keys$ = this.key.all();
   }
 
   ngOnInit() {}

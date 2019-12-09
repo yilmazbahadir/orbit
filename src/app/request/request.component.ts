@@ -33,19 +33,25 @@ export class RequestComponent implements OnInit {
   }
 
   ngOnInit() {
-    chrome.tabs.getCurrent(tab => {
+    chrome.tabs.getCurrent(async tab => {
       const background: any = chrome.extension.getBackgroundPage();
       this.request = background.window.orbit.requestsMap[tab!.id!];
-      this.key
-        .get(this.request.keyID)
-        .then(key => {
-          this.keyHashType = key.hash_type;
-          this.keyHashedPassword = key.hashed_password;
-        })
-        .catch(_ => {
-          this.invalid = true;
-        });
+      if (!this.request.keyID) {
+        this.invalidate();
+        return;
+      }
+      const key = await this.key.get(this.request.keyID);
+      if (key === undefined) {
+        this.invalidate();
+        return;
+      }
+      this.keyHashType = key.hash_type;
+      this.keyHashedPassword = key.hashed_password;
     });
+  }
+
+  invalidate() {
+    this.invalid = true;
   }
 
   reject() {

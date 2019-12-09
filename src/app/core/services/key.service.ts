@@ -16,48 +16,27 @@ export class KeyService {
     db.createObjectStore("key", { keyPath: "id" });
   }
 
-  async create(
-    id: string,
-    mnemonic: string,
-    coinType: number,
-    account: number,
-    change: number,
-    addressIndex: number,
-    hashType: HashTypes,
-    signatureType: SignatureTypes,
-    password?: string
-  ) {
-    const key: Key = {
-      id: id,
-      mnemonic: mnemonic,
-      public_key: "",
-      coin_type: coinType,
-      account: account,
-      change: change,
-      address_index: addressIndex,
-      hash_type: hashType,
-      signature_type: signatureType
+  async create(key: Omit<Key, "public_key">, password?: string) {
+    const _key: Key = {
+      ...key,
+      public_key: ""
     };
     if (password) {
       const passwordHexString = new Buffer(password).toString("hex");
       key.hashed_password = this.hash.hash(passwordHexString, key.hash_type);
     }
 
-    const privateKey = await this.generatePrivateKey(key, password);
-    key.public_key = this.signature
-      .publicKey(signatureType, privateKey)
+    const privateKey = await this.generatePrivateKey(_key, password);
+    _key.public_key = this.signature
+      .publicKey(key.signature_type, privateKey)
       .toString("hex");
-    await this.set(key);
+    await this.set(_key);
 
     return key;
   }
 
-  get(id: string): Promise<Key> {
+  get(id: string): Promise<Key | undefined> {
     return new Promise((resolve, reject) => {
-      if(!id) {
-        reject(new Error())
-        return
-      }
       const openReq = indexedDB.open("orbit");
       openReq.onupgradeneeded = this.onUpgradeNeeded;
       openReq.onsuccess = _ => {
@@ -65,15 +44,11 @@ export class KeyService {
         const store = db.transaction("key", "readonly").objectStore("key");
         const getReq = store.get(id);
         getReq.onsuccess = event => {
-          const key = (event.target as any).result
-          if(key === undefined) {
-            reject(new Error())
-            return
-          }
+          const key = (event.target as any).result;
           resolve(key);
         };
-        getReq.onerror = _ => {
-          reject(new Error());
+        getReq.onerror = event => {
+          reject((event.target as any).result);
         };
       };
     });
@@ -90,8 +65,8 @@ export class KeyService {
         getReq.onsuccess = event => {
           resolve((event.target as any).result);
         };
-        getReq.onerror = _ => {
-          reject(new Error());
+        getReq.onerror = event => {
+          reject((event.target as any).result);
         };
       };
     });
@@ -108,8 +83,8 @@ export class KeyService {
         putReq.onsuccess = _ => {
           resolve(key.id);
         };
-        putReq.onerror = _ => {
-          reject(new Error());
+        putReq.onerror = event => {
+          reject((event.target as any).result);
         };
       };
     });
@@ -126,8 +101,8 @@ export class KeyService {
         deleteReq.onsuccess = _ => {
           resolve();
         };
-        deleteReq.onerror = _ => {
-          reject(new Error());
+        deleteReq.onerror = event => {
+          reject((event.target as any).result);
         };
       };
     });

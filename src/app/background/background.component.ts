@@ -89,6 +89,9 @@ export class BackgroundComponent implements OnInit {
 
   async sign(keyID: string, dataHexString: string, password?: string) {
     const key = await this.key.get(keyID);
+    if (key === undefined) {
+      throw Error();
+    }
     const privateKey = await this.key.generatePrivateKey(key, password);
     const hash = this.hash.hash(dataHexString, key.hash_type);
     return this.signature.sign(hash, key.signature_type, privateKey);
