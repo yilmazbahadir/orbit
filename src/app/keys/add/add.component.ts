@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
 import { Key, HashTypes, SignatureTypes } from "../../../types/key";
 import { KeyService } from "../../core/services/key.service";
 import * as bip39 from "bip39";
@@ -22,12 +21,10 @@ export class AddComponent implements OnInit {
     password: string;
     isPasswordVisible: boolean;
   };
-  hashTypes$: BehaviorSubject<string[]>;
-  signatureTypes$: BehaviorSubject<string[]>;
+  hashTypes: HashTypes[];
+  signatureTypes: SignatureTypes[];
 
-  constructor(
-    private key: KeyService
-  ) {
+  constructor(private key: KeyService) {
     this.forms = {
       id: "",
       mnemonic: "",
@@ -40,15 +37,10 @@ export class AddComponent implements OnInit {
       password: "",
       isPasswordVisible: false
     };
-    this.hashTypes$ = new BehaviorSubject<string[]>([]);
-    this.signatureTypes$ = new BehaviorSubject<string[]>([]);
+    this.hashTypes = [];
+    this.signatureTypes = [];
   }
   ngOnInit() {}
-
-  ngOnDestroy() {
-    this.hashTypes$.complete();
-    this.signatureTypes$.complete;
-  }
 
   async submit() {
     await this.key.create(
@@ -61,7 +53,7 @@ export class AddComponent implements OnInit {
       this.forms.hashType,
       this.forms.signatureType,
       this.forms.password
-    )
+    );
   }
 
   generateMnemonic() {
