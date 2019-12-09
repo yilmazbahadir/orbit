@@ -1,27 +1,35 @@
-<p>{{ keyName }}による署名に同意しますか？</p>
-<pre>
-  {{ request.dataHexString }}
-</pre>
-<form #form="ngForm" (submit)="confirm()">
-  <mat-form-field fxFill>
-    <mat-label>Password</mat-label>
-    <input
-      matInput
-      type="password"
-      name="password"
-      [(ngModel)]="forms.password"
-    />
-  </mat-form-field>
-  <div fxLayout="row wrap" fxLayoutGap="16px grid">
-    <div fxFlex="50">
-      <button mat-stroked-button fxFill type="button" (click)="reject()">
-        Reject
-      </button>
+<ng-container *ngIf="request?.keyID">
+  <p>{{ request.keyID }}による署名に同意しますか？</p>
+  <pre>
+    {{ request.dataHexString }}
+  </pre>
+  <form #form="ngForm" (submit)="confirm()">
+    <mat-form-field fxFill>
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        type="password"
+        name="password"
+        [(ngModel)]="forms.password"
+      />
+    </mat-form-field>
+    <div fxLayout="row wrap" fxLayoutGap="16px grid">
+      <div fxFlex="50">
+        <button mat-stroked-button fxFill type="button" (click)="reject()">
+          Reject
+        </button>
+      </div>
+      <div fxFlex="50">
+        <button mat-flat-button fxFill color="accent">
+          Confirm
+        </button>
+      </div>
     </div>
-    <div fxFlex="50">
-      <button mat-flat-button fxFill color="accent">
-        Confirm
-      </button>
-    </div>
-  </div>
-</form>
+  </form>
+</ng-container>
+<ng-container *ngIf="invalid">
+  <p>無効なキーID{{ request?.keyID }}です。</p>
+  <button mat-stroked-button fxFill (click)="reject()">
+    Close
+  </button>
+</ng-container>

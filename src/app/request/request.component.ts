@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Request } from "../../types/request";
 import { KeyService } from "../core/services/key.service";
 import { HashTypes } from "../../types/key";
-import { HashService } from '../core/services/hash.service';
+import { HashService } from "../core/services/hash.service";
 
 @Component({
   selector: "app-request",
@@ -15,7 +15,7 @@ export class RequestComponent implements OnInit {
   };
   request: Request;
 
-  keyName: string;
+  invalid: boolean;
   keyHashType: HashTypes;
   keyHashedPassword?: string;
 
@@ -28,7 +28,7 @@ export class RequestComponent implements OnInit {
       dataHexString: "",
       callback: (reponse: boolean) => {}
     };
-    this.keyName = "";
+    this.invalid = false;
     this.keyHashType = HashTypes.SHA256;
   }
 
@@ -36,11 +36,15 @@ export class RequestComponent implements OnInit {
     chrome.tabs.getCurrent(tab => {
       const background: any = chrome.extension.getBackgroundPage();
       this.request = background.window.orbit.requestsMap[tab!.id!];
-      this.key.get(this.request.keyID).then(key => {
-        this.keyName = key.name;
-        this.keyHashType = key.hash_type
-        this.keyHashedPassword = key.hashed_password;
-      });
+      this.key
+        .get(this.request.keyID)
+        .then(key => {
+          this.keyHashType = key.hash_type;
+          this.keyHashedPassword = key.hashed_password;
+        })
+        .catch(_ => {
+          this.invalid = true;
+        });
     });
   }
 
@@ -49,14 +53,14 @@ export class RequestComponent implements OnInit {
   }
 
   confirm() {
-    if(this.keyHashedPassword) {
-      const passwordHexString = new Buffer(this.forms.password).toString("hex")
-      const hash = this.hash.hash(passwordHexString, this.keyHashType)
-      if(hash !== this.keyHashedPassword) {
+    if (this.keyHashedPassword) {
+      const passwordHexString = new Buffer(this.forms.password).toString("hex");
+      const hash = this.hash.hash(passwordHexString, this.keyHashType);
+      if (hash !== this.keyHashedPassword) {
         return;
       }
     }
-    
+
     this.request.callback(true);
   }
 }

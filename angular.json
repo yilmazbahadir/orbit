@@ -23,9 +23,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/manifest.json",
-              "src/chrome/lib/background.js",
-              "src/chrome/lib/content_script.js",
-              "src/chrome/lib/injection.js"
+              "src/extension"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",

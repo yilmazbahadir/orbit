@@ -1,6 +1,5 @@
 export interface Key {
   id: string;
-  name: string;
   public_key: string;
   hash_type: HashTypes;
   signature_type: SignatureTypes;

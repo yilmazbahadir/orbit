@@ -1,18 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Key, HashTypes, SignatureTypes } from '../../../types/key';
-import { HashService } from '../../core/services/hash.service';
-import { SignatureService } from '../../core/services/signature.service';
-import { KeyService } from '../../core/services/key.service';
+import { Component, OnInit } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
+import { Key, HashTypes, SignatureTypes } from "../../../types/key";
+import { KeyService } from "../../core/services/key.service";
+import * as bip39 from "bip39";
 
 @Component({
-  selector: 'app-add',
-  templateUrl: './add.component.html',
-  styleUrls: ['./add.component.css']
+  selector: "app-add",
+  templateUrl: "./add.component.html",
+  styleUrls: ["./add.component.css"]
 })
 export class AddComponent implements OnInit {
   forms: {
-    name: string;
+    id: string;
     mnemonic: string;
     coinType: number;
     account: number;
@@ -26,9 +25,11 @@ export class AddComponent implements OnInit {
   hashTypes$: BehaviorSubject<string[]>;
   signatureTypes$: BehaviorSubject<string[]>;
 
-  constructor(private key: KeyService, private hash: HashService, private signature: SignatureService) {
+  constructor(
+    private key: KeyService
+  ) {
     this.forms = {
-      name: "",
+      id: "",
       mnemonic: "",
       coinType: 1,
       account: 0,
@@ -49,25 +50,21 @@ export class AddComponent implements OnInit {
     this.signatureTypes$.complete;
   }
 
-  coinTypeChange(coinType: number) {}
+  async submit() {
+    await this.key.create(
+      this.forms.id,
+      this.forms.mnemonic,
+      this.forms.coinType,
+      this.forms.account,
+      this.forms.change,
+      this.forms.addressIndex,
+      this.forms.hashType,
+      this.forms.signatureType,
+      this.forms.password
+    )
+  }
 
-  submit() {
-    const key: Key = {
-      id: "",
-      name: this.forms.name,
-      public_key: "",
-      mnemonic: this.forms.mnemonic,
-      coin_type: this.forms.coinType,
-      account: this.forms.account,
-      change: this.forms.change,
-      address_index: this.forms.addressIndex,
-      hash_type: this.forms.hashType,
-      signature_type: this.forms.signatureType, 
-    }
-    if(this.forms.password) {
-      const passwordHexString = new Buffer(this.forms.password).toString("hex")
-      key.hashed_password = this.hash.hash(passwordHexString, key.hash_type)
-    }
-    //public
+  generateMnemonic() {
+    this.forms.mnemonic = bip39.generateMnemonic();
   }
 }

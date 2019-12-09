@@ -5,14 +5,19 @@
       <mat-icon>add</mat-icon>
     </button>
   </div>
-  <ng-container *ngIf="keys.length === 0; else divider">
+  <ng-container *ngIf="keys?.length > 0; else empty">
+    <mat-nav-list>
+      <ng-container *ngFor="let key of keys">
+        <mat-list-item routerLink="/keys/{{ key.id }}">
+          <div
+            mat-list-icon
+            [ngClass]="{ backgroundColor: getColorCode(key) }"
+          ></div>
+        </mat-list-item>
+      </ng-container>
+    </mat-nav-list>
+  </ng-container>
+  <ng-template #empty>
     <p class="empty">There is no key.</p>
-  </ng-container>
-  <ng-template #divider>
-    <mat-divider></mat-divider>
   </ng-template>
-  <ng-container *ngFor="let key of keys">
-    <div class="icon" [ngClass]="{ color: getColorCode(key) }"></div>
-    <mat-divider></mat-divider>
-  </ng-container>
 </ng-container>

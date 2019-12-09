@@ -14,7 +14,7 @@
         "https://*/*"
       ],
       "js": [
-        "chrome/lib/content_script.js"
+        "extension/content_script.js"
       ],
       "run_at": "document_start",
       "all_frames": true
@@ -28,14 +28,6 @@
     "tabs"
   ],
   "web_accessible_resources": [
-    "chrome/lib/injection.js"
-  ],
-  "externally_connectable": {
-    "matches": [
-      "https://www.google.com/*"
-    ],
-    "ids": [
-      "*"
-    ]
-  }
+    "extension/injection.js"
+  ]
 }

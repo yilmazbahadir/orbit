@@ -15,15 +15,15 @@
     <link rel="shortcut icon" href="" />
 
     <script>
-      function onClick(keyName, dataHexString) {
-        window.cosmos
-          .requestSignature(keyName, dataHexString)
+      function onClick(keyID, dataHexString) {
+        window.orbit
+          .requestSignature(keyID, dataHexString)
           .then(response => console.log(response));
       }
     </script>
   </head>
   <body>
-    <button onclick="onClick('Hoge', 'Hello world!')">
+    <button onclick="onClick('hoge', 'Hello world!')">
       Hello world!
     </button>
   </body>

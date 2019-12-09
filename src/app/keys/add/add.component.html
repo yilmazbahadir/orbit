@@ -6,14 +6,30 @@
 </div>
 <form #form="ngForm" (submit)="submit()">
   <mat-form-field fxFill>
+    <mat-label>ID</mat-label>
+    <input
+      matInput
+      required
+      name="id"
+      pattern="^[a-z][a-z0-9-]*$"
+      [(ngModel)]="forms.id"
+    />
+    <mat-hint>^[a-z][a-z0-9-]*$</mat-hint>
+  </mat-form-field>
+  <mat-form-field fxFill appearance="outline">
     <mat-label>Mnemonic</mat-label>
     <textarea
       matInput
       required
+      rows="3"
+      style="resize: none;"
       name="mnemonic"
       pattern="^[a-z\s]+$"
       [(ngModel)]="forms.mnemonic"
     ></textarea>
+    <button mat-flat-button matSuffix color="accent">
+      <mat-icon>create</mat-icon>
+    </button>
   </mat-form-field>
   <mat-form-field fxFill>
     <mat-label>Coin Type</mat-label>
@@ -21,7 +37,6 @@
       required
       name="coin-type"
       [(ngModel)]="forms.coinType"
-      (change)="coinTypeChange($event.target.value)"
     >
       <mat-option [value]="0">Bitcoin ($BTC)</mat-option>
       <mat-option [value]="1">All Testnets</mat-option>
@@ -40,8 +55,8 @@
   <mat-form-field fxFill>
     <mat-label>Change</mat-label>
     <mat-select required name="change" [(ngModel)]="forms.change">
-      <mat-option [value]="0">External chain</mat-option>
-      <mat-option [value]="1">Internal chain</mat-option>
+      <mat-option [value]="0">0 External chain</mat-option>
+      <mat-option [value]="1">1 Internal chain</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field fxFill>
@@ -89,6 +104,6 @@
     </button>
   </mat-form-field>
   <button mat-stroked-button fxFill color="accent" [disabled]="form.invalid">
-    Generate Private Key
+    Add Private Key
   </button>
 </form>
