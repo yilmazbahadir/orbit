@@ -1,14 +1,8 @@
-<ng-container *ngIf="invalid; else valid">
-  <p>無効なキーID{{ request?.keyID }}です。</p>
-  <button mat-stroked-button fxFill (click)="reject()">
-    Close
-  </button>
-</ng-container>
-<ng-template #valid>
-  <ng-container *ngIf="request?.keyID">
-    <p>{{ request.keyID }}による署名に同意しますか？</p>
+<ng-container *ngIf="!!request">
+  <ng-container *ngIf="!!key; else invalid">
+    <p>{{ request?.keyID }}による署名に同意しますか？</p>
     <pre>
-      {{ request.dataHexString }}
+      {{ request?.dataHexString }}
     </pre>
     <form #form="ngForm" (submit)="confirm()">
       <mat-form-field fxFill>
@@ -34,4 +28,10 @@
       </div>
     </form>
   </ng-container>
-</ng-template>
+  <ng-template #invalid>
+    <p>無効なキーID{{ request?.keyID }}です。</p>
+    <button mat-stroked-button fxFill (click)="reject()">
+      Close
+    </button>
+  </ng-template>
+</ng-container>

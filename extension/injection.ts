@@ -1,23 +1,4 @@
-interface Key {
-  id: string;
-  public_key: string;
-  hash_type: HashTypes;
-  signature_type: SignatureTypes;
-  mnemonic: string;
-  coin_type: number;
-  account: number;
-  change: number;
-  address_index: number;
-  hashed_password?: string;
-}
-
-enum HashTypes {
-  SHA256 = "sha256"
-}
-
-enum SignatureTypes {
-  SECP256K1 = "secp256k1"
-}
+import { Key } from "../src/types/key";
 
 const contentScriptQueue = {} as {
   [id: string]: {

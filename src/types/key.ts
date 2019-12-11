@@ -4,7 +4,7 @@ export interface Key {
   hash_type: HashTypes;
   signature_type: SignatureTypes;
   mnemonic: string;
-  coin_type: number;
+  coin_type: CoinTypes;
   account: number;
   change: number;
   address_index: number;
@@ -17,4 +17,10 @@ export enum HashTypes {
 
 export enum SignatureTypes {
   SECP256K1 = "secp256k1"
+}
+
+export enum CoinTypes {
+  BITCOIN = 0,
+  TESTNET = 1,
+  COSMOS = 118
 }

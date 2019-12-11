@@ -15,6 +15,15 @@ export class KeyService {
     const db: IDBDatabase = event.target.result;
     db.createObjectStore("key", { keyPath: "id" });
   }
+  
+  async generatePrivateKey(key: Key, password?: string): Promise<Buffer> {
+    const seed = await bip39.mnemonicToSeed(key.mnemonic, password);
+    const node = bip32.fromSeed(seed);
+    const bip44 = `m/44'/${key.coin_type}'/${key.account}'/${key.change}/${key.address_index}`;
+    const child = node.derivePath(bip44);
+
+    return child.privateKey!;
+  }
 
   async create(key: Omit<Key, "public_key">, password?: string) {
     const _key: Key = {
@@ -22,17 +31,17 @@ export class KeyService {
       public_key: ""
     };
     if (password) {
-      const passwordHexString = new Buffer(password).toString("hex");
-      key.hashed_password = this.hash.hash(passwordHexString, key.hash_type);
+      key.hashed_password = this.hash.hash(new Buffer(password), key.hash_type).toString("hex");
     }
 
     const privateKey = await this.generatePrivateKey(_key, password);
     _key.public_key = this.signature
       .publicKey(key.signature_type, privateKey)
       .toString("hex");
+      
     await this.set(_key);
 
-    return key;
+    return _key;
   }
 
   get(id: string): Promise<Key | undefined> {
@@ -106,14 +115,5 @@ export class KeyService {
         };
       };
     });
-  }
-
-  async generatePrivateKey(key: Key, password?: string): Promise<Buffer> {
-    const seed = await bip39.mnemonicToSeed(key.mnemonic, password);
-    const node = bip32.fromSeed(seed);
-    const bip44 = `m/44'/${key.coin_type}'/${key.account}'/${key.change}/${key.address_index}`;
-    const child = node.derivePath(bip44);
-
-    return child.privateKey!;
   }
 }

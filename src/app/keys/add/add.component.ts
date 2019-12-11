@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { HashTypes, SignatureTypes } from "../../../types/key";
+import { HashTypes, SignatureTypes, CoinTypes } from "../../../types/key";
 import { KeyService } from "../../core/services/key.service";
 import * as bip39 from "bip39";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-add",
@@ -12,10 +13,10 @@ export class AddComponent implements OnInit {
   forms: {
     id: string;
     mnemonic: string;
-    coinType: number;
-    account: number;
+    coinType: CoinTypes;
+    account: string;
     change: number;
-    addressIndex: number;
+    addressIndex: string;
     hashType: HashTypes;
     signatureType: SignatureTypes;
     password: string;
@@ -24,23 +25,41 @@ export class AddComponent implements OnInit {
   hashTypes: HashTypes[];
   signatureTypes: SignatureTypes[];
 
-  constructor(private key: KeyService) {
+  constructor(private router: Router, private key: KeyService) {
     this.forms = {
       id: "",
       mnemonic: "",
-      coinType: 1,
-      account: 0,
+      coinType: CoinTypes.TESTNET,
+      account: "0",
       change: 0,
-      addressIndex: 0,
+      addressIndex: "0",
       hashType: HashTypes.SHA256,
       signatureType: SignatureTypes.SECP256K1,
       password: "",
       isPasswordVisible: false
     };
-    this.hashTypes = [];
-    this.signatureTypes = [];
+    this.hashTypes = [HashTypes.SHA256];
+    this.signatureTypes = [SignatureTypes.SECP256K1];
   }
+
   ngOnInit() {}
+
+  changeCoinType() {
+    switch (this.forms.coinType) {
+      case CoinTypes.BITCOIN:
+        this.hashTypes = [HashTypes.SHA256];
+        this.signatureTypes = [SignatureTypes.SECP256K1];
+        break;
+      case CoinTypes.TESTNET:
+        this.hashTypes = [HashTypes.SHA256];
+        this.signatureTypes = [SignatureTypes.SECP256K1];
+        break;
+      case CoinTypes.COSMOS:
+        this.hashTypes = [HashTypes.SHA256];
+        this.signatureTypes = [SignatureTypes.SECP256K1];
+        break;
+    }
+  }
 
   async submit() {
     await this.key.create(
@@ -48,14 +67,15 @@ export class AddComponent implements OnInit {
         id: this.forms.id,
         mnemonic: this.forms.mnemonic,
         coin_type: this.forms.coinType,
-        account: this.forms.account,
+        account: Number(this.forms.account),
         change: this.forms.change,
-        address_index: this.forms.addressIndex,
+        address_index: Number(this.forms.addressIndex),
         hash_type: this.forms.hashType,
         signature_type: this.forms.signatureType
       },
       this.forms.password
     );
+    await this.router.navigate([""]);
   }
 
   generateMnemonic() {

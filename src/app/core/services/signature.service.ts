@@ -9,15 +9,14 @@ import { HashService } from "./hash.service";
 export class SignatureService {
   constructor() {}
 
-  signSecp256k1(hash: string, privateKey: Buffer): Buffer {
-    const buffer = Buffer.from(hash, "hex");
-    const signature = secp256k1.sign(buffer, privateKey);
+  signSecp256k1(hash: Buffer, privateKey: Buffer): Buffer {
+    const signature = secp256k1.sign(hash, privateKey);
 
     return signature;
   }
 
   sign(
-    hash: string,
+    hash: Buffer,
     signatureType: SignatureTypes,
     privateKey: Buffer
   ) {
@@ -45,6 +44,7 @@ export class SignatureService {
     switch (signatureType) {
       case SignatureTypes.SECP256K1:
         publicKey = this.publicKeySecp256k1(privateKey);
+        break;
       default:
         publicKey = new Buffer("");
         break;

@@ -1,9 +1,3 @@
-<div fxLayout="row">
-  <span class="fill-remaining-space"></span>
-  <button mat-icon-button color="accent" routerLink="/">
-    <mat-icon>close</mat-icon>
-  </button>
-</div>
 <form #form="ngForm" (submit)="submit()">
   <mat-form-field fxFill>
     <mat-label>ID</mat-label>
@@ -14,7 +8,7 @@
       pattern="^[a-z][a-z0-9-]*$"
       [(ngModel)]="forms.id"
     />
-    <mat-hint>^[a-z][a-z0-9-]*$</mat-hint>
+    <mat-error>^[a-z][a-z0-9-]*$</mat-error>
   </mat-form-field>
   <mat-form-field fxFill appearance="outline">
     <mat-label>Mnemonic</mat-label>
@@ -27,8 +21,14 @@
       pattern="^[a-z\s]+$"
       [(ngModel)]="forms.mnemonic"
     ></textarea>
-    <button mat-flat-button matSuffix color="accent">
-      <mat-icon>create</mat-icon>
+    <button
+      mat-icon-button
+      matSuffix
+      type="button"
+      color="accent"
+      (click)="generateMnemonic()"
+    >
+      <mat-icon>autorenew</mat-icon>
     </button>
   </mat-form-field>
   <mat-form-field fxFill>
@@ -37,54 +37,34 @@
       required
       name="coin-type"
       [(ngModel)]="forms.coinType"
+      (change)="changeCoinType()"
     >
-      <mat-option [value]="0">Bitcoin ($BTC)</mat-option>
-      <mat-option [value]="1">All Testnets</mat-option>
-      <mat-option [value]="118">Cosmos ($ATOM)</mat-option>
+      <mat-option [value]="0">0 Bitcoin</mat-option>
+      <mat-option [value]="1">1 All Testnets</mat-option>
+      <mat-option [value]="118">118 Cosmos</mat-option>
     </mat-select>
-  </mat-form-field>
-  <mat-form-field fxFill>
-    <mat-label>Account</mat-label>
-    <mat-slider
-      [min]="0"
-      [max]="99"
-      name="account"
-      [(ngModel)]="forms.account"
-    ></mat-slider>
-  </mat-form-field>
-  <mat-form-field fxFill>
-    <mat-label>Change</mat-label>
-    <mat-select required name="change" [(ngModel)]="forms.change">
-      <mat-option [value]="0">0 External chain</mat-option>
-      <mat-option [value]="1">1 Internal chain</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field fxFill>
-    <mat-label>Address Index</mat-label>
-    <mat-slider
-      [min]="0"
-      [max]="99"
-      name="address-index"
-      [(ngModel)]="forms.addressIndex"
-    ></mat-slider>
   </mat-form-field>
   <mat-form-field fxFill>
     <mat-label>Hash Type</mat-label>
     <mat-select required name="hash-type" [(ngModel)]="forms.hashType">
       <ng-container *ngFor="let type of hashTypes">
         <mat-option [value]="type">{{ type }}</mat-option>
-      </ng-container></mat-select
-    >
+      </ng-container>
+    </mat-select>
   </mat-form-field>
   <mat-form-field fxFill>
     <mat-label>Signature Type</mat-label>
-    <mat-select required name="hash-type" [(ngModel)]="forms.signatureType">
+    <mat-select
+      required
+      name="signature-type"
+      [(ngModel)]="forms.signatureType"
+    >
       <ng-container *ngFor="let type of signatureTypes">
         <mat-option [value]="type">{{ type }}</mat-option>
       </ng-container>
     </mat-select>
   </mat-form-field>
-  <mat-form-field>
+  <mat-form-field fxFill>
     <mat-label>Password (Optional)</mat-label>
     <input
       matInput
@@ -96,14 +76,45 @@
       mat-button
       matSuffix
       type="button"
-      (click)="forms.isPasswordVisible = !forms.isPasswordVisible"
+      (mousedown)="forms.isPasswordVisible = true"
+      (mouseup)="forms.isPasswordVisible = false"
     >
-      <mat-icon>
-        {{ forms.isPasswordVisible ? "visibility_off" : "visibility" }}
-      </mat-icon>
+      <mat-icon>visibility</mat-icon>
     </button>
   </mat-form-field>
   <button mat-stroked-button fxFill color="accent" [disabled]="form.invalid">
     Add Private Key
   </button>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>Advanced</mat-expansion-panel-header>
+    <mat-form-field fxFill>
+      <mat-label>Account</mat-label>
+      <input
+        matInput
+        required
+        pattern="^[0-9]+$"
+        name="account"
+        [(ngModel)]="forms.account"
+      />
+      <mat-error>^^[0-9]$</mat-error>
+    </mat-form-field>
+    <mat-form-field fxFill>
+      <mat-label>Change</mat-label>
+      <mat-select required name="change" [(ngModel)]="forms.change">
+        <mat-option [value]="0">0 External chain</mat-option>
+        <mat-option [value]="1">1 Internal chain</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field fxFill>
+      <mat-label>Address Index</mat-label>
+      <input
+        matInput
+        required
+        pattern="^[0-9]+$"
+        name="address-index"
+        [(ngModel)]="forms.addressIndex"
+      />
+      <mat-error>^[0-9]+$</mat-error>
+    </mat-form-field>
+  </mat-expansion-panel>
 </form>

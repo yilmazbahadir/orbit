@@ -12,18 +12,17 @@ export class HashService {
     return crypto
       .createHash("sha256")
       .update(data)
-      .digest("hex");
+      .digest();
   }
 
-  hash(dataHexString: string, hashType: HashTypes) {
-    const data = Buffer.from(dataHexString, "hex");
+  hash(data: Buffer, hashType: HashTypes) {
     let hash;
     switch (hashType) {
       case HashTypes.SHA256:
         hash = this.sha256(data);
         break;
       default:
-        hash = "";
+        hash = new Buffer("");
         break;
     }
     return hash;

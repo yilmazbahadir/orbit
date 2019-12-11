@@ -1,8 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { Request } from "../../types/request";
 import { KeyService } from "../core/services/key.service";
-import { HashTypes } from "../../types/key";
 import { HashService } from "../core/services/hash.service";
+import { Key } from "src/types/key";
 
 @Component({
   selector: "app-request",
@@ -13,60 +13,42 @@ export class RequestComponent implements OnInit {
   forms: {
     password: string;
   };
-  request: Request;
+  request?: Request;
+  key?: Key;
 
-  invalid: boolean;
-  keyHashType: HashTypes;
-  keyHashedPassword?: string;
-
-  constructor(private key: KeyService, private hash: HashService) {
+  constructor(
+    private _key: KeyService,
+    private hash: HashService,
+    private cd: ChangeDetectorRef
+  ) {
     this.forms = {
       password: ""
     };
-    this.request = {
-      keyID: "",
-      dataHexString: "",
-      callback: (reponse: boolean) => {}
-    };
-    this.invalid = false;
-    this.keyHashType = HashTypes.SHA256;
   }
 
   ngOnInit() {
     chrome.tabs.getCurrent(async tab => {
       const background: any = chrome.extension.getBackgroundPage();
       this.request = background.window.orbit.requestsMap[tab!.id!];
-      if (!this.request.keyID) {
-        this.invalidate();
-        return;
+      if (this.request && this.request.keyID) {
+        this.key = await this._key.get(this.request.keyID);
       }
-      const key = await this.key.get(this.request.keyID);
-      if (key === undefined) {
-        this.invalidate();
-        return;
-      }
-      this.keyHashType = key.hash_type;
-      this.keyHashedPassword = key.hashed_password;
+      this.cd.detectChanges();
     });
   }
 
-  invalidate() {
-    this.invalid = true;
-  }
-
   reject() {
-    this.request.callback(false);
+    this.request!.callback(false);
   }
 
   confirm() {
-    if (this.keyHashedPassword) {
-      const passwordHexString = new Buffer(this.forms.password).toString("hex");
-      const hash = this.hash.hash(passwordHexString, this.keyHashType);
-      if (hash !== this.keyHashedPassword) {
+    if (this.key && this.key.hashed_password) {
+      const hash = this.hash.hash(new Buffer(this.forms.password), this.key.hash_type).toString("hex");
+      if (hash !== this.key.hashed_password) {
         return;
       }
     }
 
-    this.request.callback(true);
+    this.request!.callback(true);
   }
 }

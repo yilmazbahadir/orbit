@@ -7,11 +7,11 @@ import { RequestComponent } from "./request/request.component";
 import { BackgroundComponent } from "./background/background.component";
 
 const routes: Routes = [
-  { path: "", component: HomeComponent },
-  { path: "keys/:id", component: KeyComponent },
+  { path: "", component: HomeComponent, data: { isBackUnavailable: true } },
   { path: "keys/add", component: AddComponent },
-  { path: "request", component: RequestComponent },
-  { path: "background", component: BackgroundComponent }
+  { path: "keys/:id", component: KeyComponent },
+  { path: "request", component: RequestComponent, data: { isBackUnavailable: true } },
+  { path: "background", component: BackgroundComponent, data: { isBackUnavailable: true } }
 ];
 
 @NgModule({

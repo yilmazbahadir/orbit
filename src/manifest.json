@@ -1,7 +1,7 @@
 {
   "name": "Orbit",
   "manifest_version": 2,
-  "version": "1.0",
+  "version": "0.1.0",
   "browser_action": {
     "default_icon": "favicon.ico",
     "default_popup": "index.html"
@@ -14,7 +14,7 @@
         "https://*/*"
       ],
       "js": [
-        "extension/content_script.js"
+        "extension/content-script.js"
       ],
       "run_at": "document_start",
       "all_frames": true

@@ -1,46 +1,81 @@
-<div fxLayout="row">
-  <span class="fill-remaining-space"></span>
-  <button mat-icon-button color="accent" routerLink="/">
-    <mat-icon>close</mat-icon>
-  </button>
-</div>
 <ng-container *ngIf="key$ | async as key">
   <mat-list>
-    <h3 matSubheader>{{ key.id }}</h3>
+    <h3 matSubheader>{{ key?.id }}</h3>
+    <mat-divider></mat-divider>
+    <mat-form-field fxFill>
+      <mat-label>Public Key</mat-label>
+      <input matInput readonly [value]="key?.public_key" />
+      <button
+        mat-button
+        matSuffix
+        matTooltip="Copy"
+        color="accent"
+        (click)="copy(key?.public_key)"
+      >
+        <mat-icon>input</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-form-field fxFill appearance="outline">
+      <mat-label>Mnemonic</mat-label>
+      <textarea
+        matInput
+        readonly
+        rows="3"
+        style="resize: none;"
+        [value]="key?.mnemonic"
+      ></textarea>
+      <button
+        mat-icon-button
+        matSuffix
+        matTooltip="Copy"
+        color="accent"
+        (click)="copy(key?.mnemonic)"
+      >
+        <mat-icon>input</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-divider></mat-divider>
     <mat-list-item>
       <span>Coin Type</span>
       <span class="fill-remaining-space"></span>
-      <span>{{ key.coin_type }}</span>
+      <span>{{ key?.coin_type }}</span>
     </mat-list-item>
-    <mat-list-item>
-      <span>Account</span>
-      <span class="fill-remaining-space"></span>
-      <span>{{ key.account }}</span>
-    </mat-list-item>
-    <mat-list-item>
-      <span>Change</span>
-      <span class="fill-remaining-space"></span>
-      <span>{{ key.change === 0 ? "External Chain" : "Internal Chain" }}</span>
-    </mat-list-item>
-    <mat-list-item>
-      <span>Address Index</span>
-      <span class="fill-remaining-space"></span>
-      <span>{{ key.address_index }}</span>
-    </mat-list-item>
-    <mat-list-item>
-      <span>Public Key</span>
-      <span class="fill-remaining-space"></span>
-      <span>{{ key.public_key }}</span>
-    </mat-list-item>
+    <mat-divider></mat-divider>
     <mat-list-item>
       <span>Hash Type</span>
       <span class="fill-remaining-space"></span>
-      <span>{{ key.hash_type }}</span>
+      <span>{{ key?.hash_type }}</span>
     </mat-list-item>
+    <mat-divider></mat-divider>
     <mat-list-item>
       <span>Signature Type</span>
       <span class="fill-remaining-space"></span>
-      <span>{{ key.signature_type }}</span>
+      <span>{{ key?.signature_type }}</span>
     </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <span>Account</span>
+      <span class="fill-remaining-space"></span>
+      <span>{{ key?.account }}</span>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <span>Change</span>
+      <span class="fill-remaining-space"></span>
+      <span>
+        {{ key?.change === 0 ? "0 External Chain" : "1 Internal Chain" }}
+      </span>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <span>Address Index</span>
+      <span class="fill-remaining-space"></span>
+      <span>{{ key?.address_index }}</span>
+    </mat-list-item>
+    <mat-divider></mat-divider>
   </mat-list>
+  <br />
+  <button mat-flat-button fxFill color="warn" (click)="delete(key?.id)">
+    <mat-icon>delete</mat-icon>
+  </button>
 </ng-container>

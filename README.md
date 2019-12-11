@@ -1,5 +1,11 @@
 # Orbit
 
+```Shell
+$ npm run i
+$ npm run build-aot
+$ npm run build-prod
+```
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.20.
 
 ## Development server

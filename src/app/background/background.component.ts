@@ -93,7 +93,8 @@ export class BackgroundComponent implements OnInit {
       throw Error();
     }
     const privateKey = await this.key.generatePrivateKey(key, password);
-    const hash = this.hash.hash(dataHexString, key.hash_type);
+    const data = new Buffer(dataHexString, "hex")
+    const hash = this.hash.hash(data, key.hash_type);
     return this.signature.sign(hash, key.signature_type, privateKey);
   }
 }
