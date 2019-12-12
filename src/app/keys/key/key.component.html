@@ -15,7 +15,7 @@
     <mat-list>
       <h3 matSubheader>{{ key?.id }}</h3>
       <mat-divider></mat-divider>
-      <mat-form-field fxFill>
+      <mat-form-field fxFill appearance="outline">
         <mat-label>Public Key</mat-label>
         <input matInput readonly [value]="key?.public_key" />
         <button
