@@ -22,6 +22,7 @@ export class AddComponent implements OnInit {
     password: string;
     isPasswordVisible: boolean;
   };
+  coinTypes: CoinTypes[];
   hashTypes: HashTypes[];
   signatureTypes: SignatureTypes[];
 
@@ -38,8 +39,9 @@ export class AddComponent implements OnInit {
       password: "",
       isPasswordVisible: false
     };
-    this.hashTypes = [HashTypes.SHA256];
-    this.signatureTypes = [SignatureTypes.SECP256K1];
+    this.coinTypes = [CoinTypes.BITCOIN, CoinTypes.TESTNET, CoinTypes.COSMOS];
+    this.hashTypes = [HashTypes.SHA256, HashTypes.SHA3_256, HashTypes.KECCAK256];
+    this.signatureTypes = [SignatureTypes.SECP256K1, SignatureTypes.ED25519];
   }
 
   ngOnInit() {}
@@ -51,8 +53,8 @@ export class AddComponent implements OnInit {
         this.signatureTypes = [SignatureTypes.SECP256K1];
         break;
       case CoinTypes.TESTNET:
-        this.hashTypes = [HashTypes.SHA256];
-        this.signatureTypes = [SignatureTypes.SECP256K1];
+        this.hashTypes = [HashTypes.SHA256, HashTypes.SHA3_256, HashTypes.KECCAK256];
+        this.signatureTypes = [SignatureTypes.SECP256K1, SignatureTypes.ED25519];
         break;
       case CoinTypes.COSMOS:
         this.hashTypes = [HashTypes.SHA256];
@@ -80,5 +82,13 @@ export class AddComponent implements OnInit {
 
   generateMnemonic() {
     this.forms.mnemonic = bip39.generateMnemonic();
+  }
+
+  getCoinTypeString(coinType: CoinTypes) {
+    return this.key.getCoinTypeString(coinType);
+  }
+
+  getChangeString(change: number) {
+    return this.key.getChangeString(change);
   }
 }

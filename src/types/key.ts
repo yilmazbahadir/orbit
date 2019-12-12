@@ -12,11 +12,14 @@ export interface Key {
 }
 
 export enum HashTypes {
-  SHA256 = "sha256"
+  SHA256 = "sha256",
+  SHA3_256 = "sha3-256",
+  KECCAK256 = "keccak256"
 }
 
 export enum SignatureTypes {
-  SECP256K1 = "secp256k1"
+  SECP256K1 = "secp256k1",
+  ED25519 = "ed25519"
 }
 
 export enum CoinTypes {

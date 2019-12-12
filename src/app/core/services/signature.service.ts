@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as secp256k1 from "tiny-secp256k1";
 import { HashTypes, SignatureTypes } from "../../../types/key";
-import { HashService } from "./hash.service";
+import * as nacl from "tweetnacl";
 
 @Injectable({
   providedIn: "root"
@@ -15,41 +15,42 @@ export class SignatureService {
     return signature;
   }
 
-  sign(
-    hash: Buffer,
-    signatureType: SignatureTypes,
-    privateKey: Buffer
-  ) {
-    let signature: Buffer;
-    switch (signatureType) {
-      case SignatureTypes.SECP256K1:
-        signature = this.signSecp256k1(hash, privateKey);
-      default:
-        signature = new Buffer("");
-        break;
-    }
+  signEd25519(hash: Buffer, privateKey: Buffer): Buffer {
+    const keypair = nacl.sign.keyPair.fromSeed(privateKey);
+    const signature = Buffer.from(nacl.sign(hash, keypair.secretKey));
 
     return signature;
   }
 
-  publicKeySecp256k1(privateKey: Buffer): Buffer {
-    return secp256k1.pointFromScalar(privateKey)!
-  }
-
-  publicKey(
-    signatureType: SignatureTypes,
-    privateKey: Buffer
-  ) {
-    let publicKey: Buffer;
+  sign(hash: Buffer, signatureType: SignatureTypes, privateKey: Buffer) {
     switch (signatureType) {
       case SignatureTypes.SECP256K1:
-        publicKey = this.publicKeySecp256k1(privateKey);
-        break;
+        return this.signSecp256k1(hash, privateKey);
+      case SignatureTypes.ED25519:
+        return this.signEd25519(hash, privateKey);
       default:
-        publicKey = new Buffer("");
-        break;
+        return new Buffer("");
     }
+  }
 
-    return publicKey;
+  publicKeySecp256k1(privateKey: Buffer): Buffer {
+    return secp256k1.pointFromScalar(privateKey)!;
+  }
+
+  publicKeyEd25519(privateKey: Buffer): Buffer {
+    const keypair = nacl.sign.keyPair.fromSeed(privateKey);
+
+    return Buffer.from(keypair.publicKey);
+  }
+
+  publicKey(signatureType: SignatureTypes, privateKey: Buffer) {
+    switch (signatureType) {
+      case SignatureTypes.SECP256K1:
+        return this.publicKeySecp256k1(privateKey);
+      case SignatureTypes.ED25519:
+        return this.publicKeyEd25519(privateKey);
+      default:
+        return new Buffer("");
+    }
   }
 }

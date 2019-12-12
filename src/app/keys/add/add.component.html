@@ -1,120 +1,129 @@
-<form #form="ngForm" (submit)="submit()">
-  <mat-form-field fxFill>
-    <mat-label>ID</mat-label>
-    <input
-      matInput
-      required
-      name="id"
-      pattern="^[a-z][a-z0-9-]*$"
-      [(ngModel)]="forms.id"
-    />
-    <mat-error>^[a-z][a-z0-9-]*$</mat-error>
-  </mat-form-field>
-  <mat-form-field fxFill appearance="outline">
-    <mat-label>Mnemonic</mat-label>
-    <textarea
-      matInput
-      required
-      rows="3"
-      style="resize: none;"
-      name="mnemonic"
-      pattern="^[a-z\s]+$"
-      [(ngModel)]="forms.mnemonic"
-    ></textarea>
-    <button
-      mat-icon-button
-      matSuffix
-      type="button"
-      color="accent"
-      (click)="generateMnemonic()"
-    >
-      <mat-icon>autorenew</mat-icon>
-    </button>
-  </mat-form-field>
-  <mat-form-field fxFill>
-    <mat-label>Coin Type</mat-label>
-    <mat-select
-      required
-      name="coin-type"
-      [(ngModel)]="forms.coinType"
-      (change)="changeCoinType()"
-    >
-      <mat-option [value]="0">0 Bitcoin</mat-option>
-      <mat-option [value]="1">1 All Testnets</mat-option>
-      <mat-option [value]="118">118 Cosmos</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field fxFill>
-    <mat-label>Hash Type</mat-label>
-    <mat-select required name="hash-type" [(ngModel)]="forms.hashType">
-      <ng-container *ngFor="let type of hashTypes">
-        <mat-option [value]="type">{{ type }}</mat-option>
-      </ng-container>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field fxFill>
-    <mat-label>Signature Type</mat-label>
-    <mat-select
-      required
-      name="signature-type"
-      [(ngModel)]="forms.signatureType"
-    >
-      <ng-container *ngFor="let type of signatureTypes">
-        <mat-option [value]="type">{{ type }}</mat-option>
-      </ng-container>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field fxFill>
-    <mat-label>Password (Optional)</mat-label>
-    <input
-      matInput
-      type="{{ forms.isPasswordVisible ? 'text' : 'password' }}"
-      name="password"
-      [(ngModel)]="forms.password"
-    />
-    <button
-      mat-button
-      matSuffix
-      type="button"
-      (mousedown)="forms.isPasswordVisible = true"
-      (mouseup)="forms.isPasswordVisible = false"
-    >
-      <mat-icon>visibility</mat-icon>
-    </button>
-  </mat-form-field>
-  <button mat-stroked-button fxFill color="accent" [disabled]="form.invalid">
-    Add Private Key
+<mat-toolbar class="mat-elevation-z4 toolbar" color="primary">
+  <button mat-icon-button routerLink="/">
+    <mat-icon>arrow_back</mat-icon>
   </button>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>Advanced</mat-expansion-panel-header>
+  <h1>Orbit</h1>
+</mat-toolbar>
+<div class="container">
+  <form #form="ngForm" (submit)="submit()">
     <mat-form-field fxFill>
-      <mat-label>Account</mat-label>
+      <mat-label>ID</mat-label>
       <input
         matInput
         required
-        pattern="^[0-9]+$"
-        name="account"
-        [(ngModel)]="forms.account"
+        name="id"
+        pattern="^[a-z][a-z0-9-]*$"
+        [(ngModel)]="forms.id"
       />
-      <mat-error>^^[0-9]$</mat-error>
+      <mat-error>^[a-z][a-z0-9-]*$</mat-error>
+    </mat-form-field>
+    <mat-form-field fxFill appearance="outline">
+      <mat-label>Mnemonic</mat-label>
+      <textarea
+        matInput
+        required
+        rows="3"
+        style="resize: none;"
+        name="mnemonic"
+        pattern="^[a-z\s]+$"
+        [(ngModel)]="forms.mnemonic"
+      ></textarea>
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        color="accent"
+        (click)="generateMnemonic()"
+      >
+        <mat-icon>autorenew</mat-icon>
+      </button>
     </mat-form-field>
     <mat-form-field fxFill>
-      <mat-label>Change</mat-label>
-      <mat-select required name="change" [(ngModel)]="forms.change">
-        <mat-option [value]="0">0 External chain</mat-option>
-        <mat-option [value]="1">1 Internal chain</mat-option>
+      <mat-label>Coin Type</mat-label>
+      <mat-select
+        required
+        name="coin-type"
+        [(ngModel)]="forms.coinType"
+        (change)="changeCoinType()"
+      >
+        <mat-option [value]="0">0 Bitcoin</mat-option>
+        <mat-option [value]="1">1 All Testnets</mat-option>
+        <mat-option [value]="118">118 Cosmos</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field fxFill>
-      <mat-label>Address Index</mat-label>
+      <mat-label>Hash Type</mat-label>
+      <mat-select required name="hash-type" [(ngModel)]="forms.hashType">
+        <ng-container *ngFor="let type of hashTypes">
+          <mat-option [value]="type">{{ type }}</mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field fxFill>
+      <mat-label>Signature Type</mat-label>
+      <mat-select
+        required
+        name="signature-type"
+        [(ngModel)]="forms.signatureType"
+      >
+        <ng-container *ngFor="let type of signatureTypes">
+          <mat-option [value]="type">{{ type }}</mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field fxFill>
+      <mat-label>Password (Optional)</mat-label>
       <input
         matInput
-        required
-        pattern="^[0-9]+$"
-        name="address-index"
-        [(ngModel)]="forms.addressIndex"
+        type="{{ forms.isPasswordVisible ? 'text' : 'password' }}"
+        name="password"
+        [(ngModel)]="forms.password"
       />
-      <mat-error>^[0-9]+$</mat-error>
+      <button
+        mat-button
+        matSuffix
+        type="button"
+        (mousedown)="forms.isPasswordVisible = true"
+        (mouseup)="forms.isPasswordVisible = false"
+      >
+        <mat-icon>visibility</mat-icon>
+      </button>
     </mat-form-field>
-  </mat-expansion-panel>
-</form>
+    <button mat-stroked-button fxFill color="accent" [disabled]="form.invalid">
+      Add Private Key
+    </button>
+    <br />
+    <mat-expansion-panel fxFill>
+      <mat-expansion-panel-header>Advanced</mat-expansion-panel-header>
+      <mat-form-field fxFill>
+        <mat-label>Account</mat-label>
+        <input
+          matInput
+          required
+          pattern="^[0-9]+$"
+          name="account"
+          [(ngModel)]="forms.account"
+        />
+        <mat-error>^^[0-9]$</mat-error>
+      </mat-form-field>
+      <mat-form-field fxFill>
+        <mat-label>Change</mat-label>
+        <mat-select required name="change" [(ngModel)]="forms.change">
+          <mat-option [value]="0">{{ getChangeString(0) }}</mat-option>
+          <mat-option [value]="1">{{ getChangeString(1) }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field fxFill>
+        <mat-label>Address Index</mat-label>
+        <input
+          matInput
+          required
+          pattern="^[0-9]+$"
+          name="address-index"
+          [(ngModel)]="forms.addressIndex"
+        />
+        <mat-error>^[0-9]+$</mat-error>
+      </mat-form-field>
+    </mat-expansion-panel>
+  </form>
+</div>

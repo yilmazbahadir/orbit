@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { KeyService } from "../../core/services/key.service";
-import { Key } from "../../../types/key";
+import { Key, CoinTypes } from "../../../types/key";
 import { Observable, from } from "rxjs";
 import { map, mergeMap, filter, toArray, first } from "rxjs/operators";
 
@@ -45,5 +45,13 @@ export class KeyComponent implements OnInit {
   async delete(id: string) {
     await this.key.delete(id)
     await this.router.navigate([""]);
+  }
+
+  getCoinTypeString(coinType: CoinTypes) {
+    return this.key.getCoinTypeString(coinType);
+  }
+
+  getChangeString(change: number) {
+    return this.key.getChangeString(change);
   }
 }

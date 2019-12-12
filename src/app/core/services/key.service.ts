@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Key, HashTypes, SignatureTypes } from "../../../types/key";
+import { Key, HashTypes, SignatureTypes, CoinTypes } from "../../../types/key";
 import * as bip32 from "bip32";
 import * as bip39 from "bip39";
 import { HashService } from "./hash.service";
@@ -15,7 +15,7 @@ export class KeyService {
     const db: IDBDatabase = event.target.result;
     db.createObjectStore("key", { keyPath: "id" });
   }
-  
+
   async generatePrivateKey(key: Key, password?: string): Promise<Buffer> {
     const seed = await bip39.mnemonicToSeed(key.mnemonic, password);
     const node = bip32.fromSeed(seed);
@@ -31,14 +31,16 @@ export class KeyService {
       public_key: ""
     };
     if (password) {
-      key.hashed_password = this.hash.hash(new Buffer(password), key.hash_type).toString("hex");
+      key.hashed_password = this.hash
+        .hash(new Buffer(password), key.hash_type)
+        .toString("hex");
     }
 
     const privateKey = await this.generatePrivateKey(_key, password);
     _key.public_key = this.signature
       .publicKey(key.signature_type, privateKey)
       .toString("hex");
-      
+
     await this.set(_key);
 
     return _key;
@@ -115,5 +117,27 @@ export class KeyService {
         };
       };
     });
+  }
+
+  getCoinTypeString(coinType: CoinTypes) {
+    switch (coinType) {
+      case CoinTypes.BITCOIN:
+        return "0 Bitcoin";
+      case CoinTypes.TESTNET:
+        return "1 Testnet for All";
+      case CoinTypes.COSMOS:
+        return "118";
+    }
+  }
+
+  getChangeString(change: number) {
+    switch (change) {
+      case 0:
+        return "0 External Chain";
+      case 1:
+        return "1 Internal Chain";
+      default:
+        return "";
+    }
   }
 }

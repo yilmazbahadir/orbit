@@ -1,14 +1,1 @@
-<mat-toolbar class="mat-elevation-z4 toolbar" color="primary">
-  <ng-container *ngIf="isBackUnavailable$ | async; else available">
-    <img class="icon" src="/favicon.ico" />
-  </ng-container>
-  <ng-template #available>
-    <button mat-icon-button routerLink="/">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-  </ng-template>
-  <h1>Orbit</h1>
-</mat-toolbar>
-<div class="container">
-  <router-outlet></router-outlet>
-</div>
+<router-outlet></router-outlet>
