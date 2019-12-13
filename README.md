@@ -1,9 +1,21 @@
 # Orbit
 
+Metamaskなどのように、ブラウザ拡張からJavaScriptにオブジェクトをインジェクションすることによって機能するブロックチェーンウォレット。
+SLIP44により全ブロックチェーンの秘密鍵管理に対応。アナウンスはせず、署名機能のみ提供する。
+
 ```Shell
 $ npm run i
+...
+```
+
+```Shell
 $ npm run build-aot
+...
+```
+
+```Shell
 $ npm run build-prod
+...
 ```
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.20.
