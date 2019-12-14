@@ -1,15 +1,14 @@
 import { Injectable } from "@angular/core";
-import { Key, HashTypes, SignatureTypes, CoinTypes } from "../../../types/key";
+import { Key, CoinTypes } from "../../../types/key";
 import * as bip32 from "bip32";
 import * as bip39 from "bip39";
-import { HashService } from "./hash.service";
 import { SignatureService } from "./signature.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class KeyService {
-  constructor(private hash: HashService, private signature: SignatureService) {}
+  constructor(private signature: SignatureService) {}
 
   onUpgradeNeeded(event: any) {
     const db: IDBDatabase = event.target.result;
@@ -31,8 +30,8 @@ export class KeyService {
       public_key: ""
     };
     if (password) {
-      key.hashed_password = this.hash
-        .hash(new Buffer(password), key.hash_type)
+      key.hashed_password = this.signature
+        .hash256(new Buffer(password), key.signature_type)
         .toString("hex");
     }
 

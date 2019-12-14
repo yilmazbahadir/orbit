@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { KeyService } from "../core/services/key.service";
 import { SignatureService } from "../core/services/signature.service";
 import { Request } from "../../types/request";
-import { HashService } from "../core/services/hash.service";
 
 @Component({
   selector: "app-background",
@@ -12,7 +11,6 @@ import { HashService } from "../core/services/hash.service";
 export class BackgroundComponent implements OnInit {
   constructor(
     private key: KeyService,
-    private hash: HashService,
     private signature: SignatureService
   ) {
     (window as any).orbit = {
@@ -94,7 +92,6 @@ export class BackgroundComponent implements OnInit {
     }
     const privateKey = await this.key.generatePrivateKey(key, password);
     const data = new Buffer(dataHexString, "hex")
-    const hash = this.hash.hash(data, key.hash_type);
-    return this.signature.sign(hash, key.signature_type, privateKey);
+    return this.signature.sign(data, key.signature_type, privateKey);
   }
 }

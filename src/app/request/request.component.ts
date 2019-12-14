@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { Request } from "../../types/request";
 import { KeyService } from "../core/services/key.service";
-import { HashService } from "../core/services/hash.service";
 import { Key } from "src/types/key";
+import { SignatureService } from '../core/services/signature.service';
 
 @Component({
   selector: "app-request",
@@ -18,7 +18,7 @@ export class RequestComponent implements OnInit {
 
   constructor(
     private _key: KeyService,
-    private hash: HashService,
+    private signature: SignatureService,
     private cd: ChangeDetectorRef
   ) {
     this.forms = {
@@ -43,7 +43,7 @@ export class RequestComponent implements OnInit {
 
   confirm() {
     if (this.key && this.key.hashed_password) {
-      const hash = this.hash.hash(new Buffer(this.forms.password), this.key.hash_type).toString("hex");
+      const hash = this.signature.hash256(new Buffer(this.forms.password), this.key.signature_type).toString("hex");
       if (hash !== this.key.hashed_password) {
         return;
       }

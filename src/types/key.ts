@@ -1,7 +1,6 @@
 export interface Key {
   id: string;
   public_key: string;
-  hash_type: HashTypes;
   signature_type: SignatureTypes;
   mnemonic: string;
   coin_type: CoinTypes;
@@ -11,15 +10,11 @@ export interface Key {
   hashed_password?: string;
 }
 
-export enum HashTypes {
-  SHA256 = "sha256",
-  SHA3_256 = "sha3-256",
-  KECCAK256 = "keccak256"
-}
-
 export enum SignatureTypes {
-  SECP256K1 = "secp256k1",
-  ED25519 = "ed25519"
+  SECP256K1_SHA256 = "secp256k1-sha256",
+  ED25519 = "ed25519",
+  CURVE25519_KECCAK512 = "curve25519-keccak512",
+  CURVE25519_SHA3_512 = "curve25519-sha3-512"
 }
 
 export enum CoinTypes {

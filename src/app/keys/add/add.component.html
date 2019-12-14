@@ -52,14 +52,6 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field fxFill>
-      <mat-label>Hash Type</mat-label>
-      <mat-select required name="hash-type" [(ngModel)]="forms.hashType">
-        <ng-container *ngFor="let type of hashTypes">
-          <mat-option [value]="type">{{ type }}</mat-option>
-        </ng-container>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field fxFill>
       <mat-label>Signature Type</mat-label>
       <mat-select
         required
