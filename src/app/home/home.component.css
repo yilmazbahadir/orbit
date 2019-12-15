@@ -6,3 +6,8 @@
 .mat-list-icon {
   margin-right: 1em;
 }
+
+.container {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
