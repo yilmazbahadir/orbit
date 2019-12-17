@@ -44,11 +44,11 @@
         required
         name="coin-type"
         [(ngModel)]="forms.coinType"
-        (change)="changeCoinType()"
+        (selectionChange)="changeCoinType()"
       >
-        <mat-option [value]="0">0 Bitcoin</mat-option>
-        <mat-option [value]="1">1 All Testnets</mat-option>
-        <mat-option [value]="118">118 Cosmos</mat-option>
+        <ng-container *ngFor="let type of coinTypes">
+          <mat-option [value]="type">{{ getCoinTypeString(type) }}</mat-option>
+        </ng-container>
       </mat-select>
     </mat-form-field>
     <mat-form-field fxFill>

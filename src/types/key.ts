@@ -20,5 +20,7 @@ export enum SignatureTypes {
 export enum CoinTypes {
   BITCOIN = 0,
   TESTNET = 1,
+  NEM = 43,
+  ETHEREUM = 60,
   COSMOS = 118
 }

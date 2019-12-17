@@ -124,8 +124,12 @@ export class KeyService {
         return "0 Bitcoin";
       case CoinTypes.TESTNET:
         return "1 Testnet for All";
+      case CoinTypes.NEM:
+        return "43 NEM";
+      case CoinTypes.ETHEREUM:
+        return "60 Ethereum";
       case CoinTypes.COSMOS:
-        return "118";
+        return "118 Cosmos";
     }
   }
 
