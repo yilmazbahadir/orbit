@@ -9,10 +9,7 @@ import { Request } from "../../types/request";
   styleUrls: ["./background.component.css"]
 })
 export class BackgroundComponent implements OnInit {
-  constructor(
-    private key: KeyService,
-    private signature: SignatureService
-  ) {
+  constructor(private key: KeyService, private signature: SignatureService) {
     (window as any).orbit = {
       requestsMap: {} as { [id: string]: Request }
     };
@@ -38,12 +35,20 @@ export class BackgroundComponent implements OnInit {
   }
 
   getKeys(requestID: string, sendResponse: (response?: any) => void) {
-    this.key.all().then(keys => {
-      sendResponse({
-        id: requestID,
-        value: keys
+    this.key
+      .all()
+      .then(keys =>
+        keys.map(key => {
+          delete key.mnemonic;
+          return key;
+        })
+      )
+      .then(keys => {
+        sendResponse({
+          id: requestID,
+          value: keys
+        });
       });
-    });
   }
 
   requestSignature(
@@ -91,7 +96,7 @@ export class BackgroundComponent implements OnInit {
       throw Error();
     }
     const privateKey = await this.key.generatePrivateKey(key, password);
-    const data = new Buffer(dataHexString, "hex")
+    const data = new Buffer(dataHexString, "hex");
     return this.signature.sign(data, key.signature_type, privateKey);
   }
 }
