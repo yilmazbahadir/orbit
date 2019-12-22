@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { SignatureTypes, CoinTypes } from "../../../types/key";
+import { SignatureTypes, CoinTypes } from "../../core/types/key";
 import { KeyService } from "../../core/services/key.service";
 import * as bip39 from "bip39";
 import { Router } from "@angular/router";

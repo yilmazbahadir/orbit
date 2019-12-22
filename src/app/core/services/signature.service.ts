@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import * as crypto from "crypto";
 import * as secp256k1 from "tiny-secp256k1";
 import * as nacl from "tweetnacl";
-import { SignatureTypes } from "../../../types/key";
+import { SignatureTypes } from "../types/key";
 import { SHA3, Keccak } from "sha3";
 import {
   KeyPair as Curve25519,

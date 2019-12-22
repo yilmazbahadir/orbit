@@ -1,4 +1,4 @@
-import { Key } from "../src/types/key";
+import { Key } from "../src/app/core/types/key";
 
 const contentScriptQueue = {} as {
   [id: string]: {
@@ -45,7 +45,7 @@ function getRandomId() {
     });
   },
 
-  requestSignature(keyID: string, dataHexString: string): Promise<any> {
+  requestSignature(keyID: string, dataHexString: string): Promise<string> {
     const id = getRandomId();
     window.postMessage(
       {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { KeyService } from "../../core/services/key.service";
-import { Key, CoinTypes } from "../../../types/key";
+import { Key, CoinTypes } from "../../core/types/key";
 import { Observable, from } from "rxjs";
 import { map, mergeMap, filter, toArray, first } from "rxjs/operators";
 

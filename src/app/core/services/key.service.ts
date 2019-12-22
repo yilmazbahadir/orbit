@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Key, CoinTypes } from "../../../types/key";
+import { Key, CoinTypes } from "../types/key";
 import * as bip32 from "bip32";
 import * as bip39 from "bip39";
 import { SignatureService } from "./signature.service";

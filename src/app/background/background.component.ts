@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { KeyService } from "../core/services/key.service";
 import { SignatureService } from "../core/services/signature.service";
-import { Request } from "../../types/request";
+import { Request } from "../core/types/request";
 
 @Component({
   selector: "app-background",
