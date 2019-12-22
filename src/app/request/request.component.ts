@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
-import { Request } from "../../types/request";
+import { Request } from "../core/types/request";
 import { KeyService } from "../core/services/key.service";
-import { Key } from "src/types/key";
+import { Key } from "src/app/core/types/key";
 import { SignatureService } from '../core/services/signature.service';
 
 @Component({

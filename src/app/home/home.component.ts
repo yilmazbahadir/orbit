@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Key } from "../../types/key";
+import { Key } from "../core/types/key";
 import { KeyService } from "../core/services/key.service";
 import { from, Observable } from "rxjs";
 import { SignatureService } from "../core/services/signature.service";
