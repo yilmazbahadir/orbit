@@ -5,7 +5,7 @@
   <h1>Orbit</h1>
   <span class="fill-remaining-space"></span>
   <ng-container *ngIf="key$ | async as key">
-    <button mat-icon-button (click)="delete(key?.id)">
+    <button mat-icon-button (click)="onClickDelete(key?.id)">
       <mat-icon>delete</mat-icon>
     </button>
   </ng-container>

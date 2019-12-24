@@ -11,19 +11,19 @@
       <pre>
         {{ request?.dataHexString }}
       </pre>
-      <form #form="ngForm" (submit)="confirm()">
+      <form #form="ngForm" (submit)="onSubmit(password.value)">
         <mat-form-field fxFill>
           <mat-label>Password</mat-label>
           <input
             matInput
             type="password"
             name="password"
-            [(ngModel)]="forms.password"
+            #password
           />
         </mat-form-field>
         <div fxLayout="row wrap" fxLayoutGap="16px grid">
           <div fxFlex="50">
-            <button mat-stroked-button fxFill type="button" (click)="reject()">
+            <button mat-stroked-button fxFill type="button" (click)="onClickReject()">
               Reject
             </button>
           </div>
@@ -37,7 +37,7 @@
     </ng-container>
     <ng-template #invalid>
       <p>無効なキーID{{ request?.keyID }}です。</p>
-      <button mat-stroked-button fxFill (click)="reject()">
+      <button mat-stroked-button fxFill (click)="onClickReject()">
         Close
       </button>
     </ng-template>

@@ -42,7 +42,7 @@ export class KeyComponent implements OnInit {
     document.body.removeChild(textarea);
   }
 
-  async delete(id: string) {
+  async onClickDelete(id: string) {
     await this.key.delete(id)
     await this.router.navigate([""]);
   }

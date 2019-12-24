@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { Request } from "../core/types/request";
 import { KeyService } from "../core/services/key.service";
 import { Key } from "src/app/core/types/key";
-import { SignatureService } from '../core/services/signature.service';
+import { SignatureService } from "../core/services/signature.service";
 
 @Component({
   selector: "app-request",
@@ -10,9 +10,6 @@ import { SignatureService } from '../core/services/signature.service';
   styleUrls: ["./request.component.css"]
 })
 export class RequestComponent implements OnInit {
-  forms: {
-    password: string;
-  };
   request?: Request;
   key?: Key;
 
@@ -20,11 +17,7 @@ export class RequestComponent implements OnInit {
     private _key: KeyService,
     private signature: SignatureService,
     private cd: ChangeDetectorRef
-  ) {
-    this.forms = {
-      password: ""
-    };
-  }
+  ) {}
 
   ngOnInit() {
     chrome.tabs.getCurrent(async tab => {
@@ -37,13 +30,15 @@ export class RequestComponent implements OnInit {
     });
   }
 
-  reject() {
+  onClickReject() {
     this.request!.callback(false);
   }
 
-  confirm() {
+  onSubmit(password: string) {
     if (this.key && this.key.hashed_password) {
-      const hash = this.signature.hash256(new Buffer(this.forms.password), this.key.signature_type).toString("hex");
+      const hash = this.signature
+        .hash256(new Buffer(password), this.key.signature_type)
+        .toString("hex");
       if (hash !== this.key.hashed_password) {
         return;
       }

@@ -5,17 +5,25 @@
   <h1>Orbit</h1>
 </mat-toolbar>
 <div class="container">
-  <form #form="ngForm" (submit)="submit()">
+  <form
+    #form="ngForm"
+    (submit)="
+      onSubmit(
+        id.value,
+        mnemonic.value,
+        coinType.value,
+        account.value,
+        change.value,
+        addressIndex.value,
+        signatureType.value,
+        password.value
+      )
+    "
+  >
     <mat-form-field fxFill>
       <mat-label>ID</mat-label>
-      <input
-        matInput
-        required
-        name="id"
-        pattern="^[a-z][a-z0-9-]*$"
-        [(ngModel)]="forms.id"
-      />
-      <mat-error>^[a-z][a-z0-9-]*$</mat-error>
+      <input matInput required pattern="^[a-z_][a-z_0-9]*$" name="id" #id />
+      <mat-error>^[a-z_][a-z_0-9]*$</mat-error>
     </mat-form-field>
     <mat-form-field fxFill appearance="outline">
       <mat-label>Mnemonic</mat-label>
@@ -24,16 +32,16 @@
         required
         rows="3"
         style="resize: none;"
-        name="mnemonic"
         pattern="^[a-z\s]+$"
-        [(ngModel)]="forms.mnemonic"
+        name="mnemonic"
+        #mnemonic
       ></textarea>
       <button
         mat-icon-button
         matSuffix
         type="button"
         color="accent"
-        (click)="generateMnemonic()"
+        (click)="onClickGenerateMnemonic(mnemonic)"
       >
         <mat-icon>autorenew</mat-icon>
       </button>
@@ -42,9 +50,9 @@
       <mat-label>Coin Type</mat-label>
       <mat-select
         required
+        (selectionChange)="onChangeCoinType(coinType.value)"
         name="coin-type"
-        [(ngModel)]="forms.coinType"
-        (selectionChange)="changeCoinType()"
+        #coinType
       >
         <ng-container *ngFor="let type of coinTypes">
           <mat-option [value]="type">{{ getCoinTypeString(type) }}</mat-option>
@@ -53,11 +61,7 @@
     </mat-form-field>
     <mat-form-field fxFill>
       <mat-label>Signature Type</mat-label>
-      <mat-select
-        required
-        name="signature-type"
-        [(ngModel)]="forms.signatureType"
-      >
+      <mat-select required name="signature-type" #signatureType>
         <ng-container *ngFor="let type of signatureTypes">
           <mat-option [value]="type">{{ type }}</mat-option>
         </ng-container>
@@ -67,9 +71,9 @@
       <mat-label>Password (Optional)</mat-label>
       <input
         matInput
-        type="{{ forms.isPasswordVisible ? 'text' : 'password' }}"
+        type="{{ isPasswordVisible ? 'text' : 'password' }}"
         name="password"
-        [(ngModel)]="forms.password"
+        #password
       />
       <button
         mat-button
@@ -89,18 +93,11 @@
       <mat-expansion-panel-header>Advanced</mat-expansion-panel-header>
       <mat-form-field fxFill>
         <mat-label>Account</mat-label>
-        <input
-          matInput
-          required
-          pattern="^[0-9]+$"
-          name="account"
-          [(ngModel)]="forms.account"
-        />
-        <mat-error>^^[0-9]$</mat-error>
+        <input matInput required type="number" name="account" #account />
       </mat-form-field>
       <mat-form-field fxFill>
         <mat-label>Change</mat-label>
-        <mat-select required name="change" [(ngModel)]="forms.change">
+        <mat-select required name="change" #change>
           <mat-option [value]="0">{{ getChangeString(0) }}</mat-option>
           <mat-option [value]="1">{{ getChangeString(1) }}</mat-option>
         </mat-select>
@@ -110,11 +107,10 @@
         <input
           matInput
           required
-          pattern="^[0-9]+$"
+          type="number"
           name="address-index"
-          [(ngModel)]="forms.addressIndex"
+          #addressIndex
         />
-        <mat-error>^[0-9]+$</mat-error>
       </mat-form-field>
     </mat-expansion-panel>
   </form>

@@ -1,8 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ElementRef } from "@angular/core";
 import { SignatureTypes, CoinTypes } from "../../core/types/key";
 import { KeyService } from "../../core/services/key.service";
 import * as bip39 from "bip39";
 import { Router } from "@angular/router";
+import { MatInput } from "@angular/material/input";
 
 @Component({
   selector: "app-add",
@@ -10,32 +11,12 @@ import { Router } from "@angular/router";
   styleUrls: ["./add.component.css"]
 })
 export class AddComponent implements OnInit {
-  forms: {
-    id: string;
-    mnemonic: string;
-    coinType: CoinTypes;
-    account: string;
-    change: number;
-    addressIndex: string;
-    signatureType: SignatureTypes;
-    password: string;
-    isPasswordVisible: boolean;
-  };
   coinTypes: CoinTypes[];
   signatureTypes: SignatureTypes[];
 
+  isPasswordVisible: boolean;
+
   constructor(private router: Router, private key: KeyService) {
-    this.forms = {
-      id: "",
-      mnemonic: "",
-      coinType: CoinTypes.TESTNET,
-      account: "0",
-      change: 0,
-      addressIndex: "0",
-      signatureType: SignatureTypes.SECP256K1_SHA256,
-      password: "",
-      isPasswordVisible: false
-    };
     this.coinTypes = [
       CoinTypes.BITCOIN,
       CoinTypes.TESTNET,
@@ -49,12 +30,13 @@ export class AddComponent implements OnInit {
       SignatureTypes.CURVE25519_KECCAK512,
       SignatureTypes.CURVE25519_SHA3_512
     ];
+    this.isPasswordVisible = false;
   }
 
   ngOnInit() {}
 
-  changeCoinType() {
-    switch (this.forms.coinType) {
+  onChangeCoinType(coinType: CoinTypes) {
+    switch (coinType) {
       case CoinTypes.BITCOIN:
         this.signatureTypes = [SignatureTypes.SECP256K1_SHA256];
         break;
@@ -78,24 +60,33 @@ export class AddComponent implements OnInit {
     }
   }
 
-  async submit() {
+  async onSubmit(
+    id: string,
+    mnemonic: string,
+    coinType: CoinTypes,
+    account: number,
+    change: number,
+    addressIndex: number,
+    signatureType: SignatureTypes,
+    password: string
+  ) {
     await this.key.create(
       {
-        id: this.forms.id,
-        mnemonic: this.forms.mnemonic,
-        coin_type: this.forms.coinType,
-        account: Number(this.forms.account),
-        change: this.forms.change,
-        address_index: Number(this.forms.addressIndex),
-        signature_type: this.forms.signatureType
+        id: id,
+        mnemonic: mnemonic,
+        coin_type: coinType,
+        account: account,
+        change: change,
+        address_index: addressIndex,
+        signature_type: signatureType
       },
-      this.forms.password
+      password
     );
     await this.router.navigate([""]);
   }
 
-  generateMnemonic() {
-    this.forms.mnemonic = bip39.generateMnemonic();
+  onClickGenerateMnemonic(mnemonicElement: MatInput) {
+    mnemonicElement.value = bip39.generateMnemonic();
   }
 
   getCoinTypeString(coinType: CoinTypes) {
