@@ -22,22 +22,30 @@
   >
     <mat-form-field fxFill>
       <mat-label>ID</mat-label>
-      <input matInput required pattern="^[a-z_][a-z_0-9]*$" name="id" #id />
+      <input
+        #id
+        matInput
+        ngModel
+        name="id"
+        required
+        pattern="^[a-z_][a-z_0-9]*$"
+      />
       <mat-error>^[a-z_][a-z_0-9]*$</mat-error>
     </mat-form-field>
-    <mat-form-field fxFill appearance="outline">
+    <mat-form-field fxFill>
       <mat-label>Mnemonic</mat-label>
       <textarea
+        #mnemonic="ngModel"
         matInput
-        required
         rows="3"
         style="resize: none;"
-        pattern="^[a-z\s]+$"
+        ngModel
         name="mnemonic"
-        #mnemonic
+        required
+        pattern="^[a-z\s]+$"
       ></textarea>
       <button
-        mat-icon-button
+        mat-button
         matSuffix
         type="button"
         color="accent"
@@ -49,10 +57,11 @@
     <mat-form-field fxFill>
       <mat-label>Coin Type</mat-label>
       <mat-select
+        #coinType
+        name="coin-type"
+        ngModel
         required
         (selectionChange)="onChangeCoinType(coinType.value)"
-        name="coin-type"
-        #coinType
       >
         <ng-container *ngFor="let type of coinTypes">
           <mat-option [value]="type">{{ getCoinTypeString(type) }}</mat-option>
@@ -61,7 +70,7 @@
     </mat-form-field>
     <mat-form-field fxFill>
       <mat-label>Signature Type</mat-label>
-      <mat-select required name="signature-type" #signatureType>
+      <mat-select #signatureType ngModel name="signature-type" required>
         <ng-container *ngFor="let type of signatureTypes">
           <mat-option [value]="type">{{ type }}</mat-option>
         </ng-container>
@@ -70,10 +79,11 @@
     <mat-form-field fxFill>
       <mat-label>Password (Optional)</mat-label>
       <input
+        #password
         matInput
         type="{{ isPasswordVisible ? 'text' : 'password' }}"
+        ngModel
         name="password"
-        #password
       />
       <button
         mat-button
@@ -89,15 +99,25 @@
       Add Private Key
     </button>
     <br />
-    <mat-expansion-panel fxFill>
+    <br />
+    <mat-expansion-panel>
       <mat-expansion-panel-header>Advanced</mat-expansion-panel-header>
       <mat-form-field fxFill>
         <mat-label>Account</mat-label>
-        <input matInput required type="number" name="account" #account />
+        <input
+          #account
+          matInput
+          type="number"
+          [ngModel]="0"
+          name="account"
+          required
+          [min]="0"
+          pattern="^\d+$"
+        />
       </mat-form-field>
       <mat-form-field fxFill>
         <mat-label>Change</mat-label>
-        <mat-select required name="change" #change>
+        <mat-select #change [value]="0" [ngModel]="0" name="change" required>
           <mat-option [value]="0">{{ getChangeString(0) }}</mat-option>
           <mat-option [value]="1">{{ getChangeString(1) }}</mat-option>
         </mat-select>
@@ -105,11 +125,14 @@
       <mat-form-field fxFill>
         <mat-label>Address Index</mat-label>
         <input
-          matInput
-          required
-          type="number"
-          name="address-index"
           #addressIndex
+          matInput
+          type="number"
+          [ngModel]="0"
+          name="address-index"
+          required
+          [min]="0"
+          pattern="^\d+$"
         />
       </mat-form-field>
     </mat-expansion-panel>

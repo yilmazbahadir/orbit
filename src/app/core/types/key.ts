@@ -11,10 +11,10 @@ export interface Key {
 }
 
 export enum SignatureTypes {
-  SECP256K1_SHA256 = "secp256k1-sha256",
+  SECP256K1_SHA256 = "secp256k1_sha256",
   ED25519 = "ed25519",
-  CURVE25519_KECCAK512 = "curve25519-keccak512",
-  CURVE25519_SHA3_512 = "curve25519-sha3-512"
+  CURVE25519_KECCAK512 = "curve25519_keccak512",
+  CURVE25519_SHA3_512 = "curve25519_sha3_512"
 }
 
 export enum CoinTypes {

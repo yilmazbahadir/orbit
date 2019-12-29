@@ -1,9 +1,9 @@
-import { Component, OnInit, ElementRef } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { Router } from "@angular/router";
 import { SignatureTypes, CoinTypes } from "../../core/types/key";
 import { KeyService } from "../../core/services/key.service";
 import * as bip39 from "bip39";
-import { Router } from "@angular/router";
-import { MatInput } from "@angular/material/input";
+import { NgForm, NgModel } from "@angular/forms";
 
 @Component({
   selector: "app-add",
@@ -16,20 +16,15 @@ export class AddComponent implements OnInit {
 
   isPasswordVisible: boolean;
 
+  @ViewChild("form", { static: true })
+  form!: NgForm;
+
   constructor(private router: Router, private key: KeyService) {
-    this.coinTypes = [
-      CoinTypes.BITCOIN,
-      CoinTypes.TESTNET,
-      CoinTypes.NEM,
-      CoinTypes.ETHEREUM,
-      CoinTypes.COSMOS
-    ];
-    this.signatureTypes = [
-      SignatureTypes.SECP256K1_SHA256,
-      SignatureTypes.ED25519,
-      SignatureTypes.CURVE25519_KECCAK512,
-      SignatureTypes.CURVE25519_SHA3_512
-    ];
+    this.coinTypes = Object.values(CoinTypes).filter(
+      v => !isNaN(Number(v))
+    ) as CoinTypes[];
+    console.log(this.coinTypes);
+    this.signatureTypes = Object.values(SignatureTypes);
     this.isPasswordVisible = false;
   }
 
@@ -41,12 +36,7 @@ export class AddComponent implements OnInit {
         this.signatureTypes = [SignatureTypes.SECP256K1_SHA256];
         break;
       case CoinTypes.TESTNET:
-        this.signatureTypes = [
-          SignatureTypes.SECP256K1_SHA256,
-          SignatureTypes.ED25519,
-          SignatureTypes.CURVE25519_KECCAK512,
-          SignatureTypes.CURVE25519_SHA3_512
-        ];
+        this.signatureTypes = Object.values(SignatureTypes);
         break;
       case CoinTypes.NEM:
         this.signatureTypes = [SignatureTypes.CURVE25519_KECCAK512];
@@ -85,8 +75,9 @@ export class AddComponent implements OnInit {
     await this.router.navigate([""]);
   }
 
-  onClickGenerateMnemonic(mnemonicElement: MatInput) {
-    mnemonicElement.value = bip39.generateMnemonic();
+  onClickGenerateMnemonic(mnemonicElement: NgModel) {
+    const value = bip39.generateMnemonic();
+    mnemonicElement.control.setValue(value);
   }
 
   getCoinTypeString(coinType: CoinTypes) {

@@ -23,6 +23,8 @@ import { BackgroundComponent } from "./background/background.component";
 import { RequestComponent } from "./request/request.component";
 import { KeyComponent } from './keys/key/key.component';
 import { AddComponent } from './keys/add/add.component';
+import { MinDirective } from './core/directives/min.directive';
+import { MaxDirective } from './core/directives/max.directive';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { AddComponent } from './keys/add/add.component';
     BackgroundComponent,
     RequestComponent,
     KeyComponent,
-    AddComponent
+    AddComponent,
+    MinDirective,
+    MaxDirective
   ],
   imports: [
     BrowserModule,
