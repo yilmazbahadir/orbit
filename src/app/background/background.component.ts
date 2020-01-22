@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { KeyService } from "../core/services/key.service";
-import { SignatureService } from "../core/services/signature.service";
 import { Request } from "../core/types/request";
+import { SignatureAlgorithm } from "../core/types/signature-algorithm";
 
 @Component({
   selector: "app-background",
@@ -9,7 +9,7 @@ import { Request } from "../core/types/request";
   styleUrls: ["./background.component.css"]
 })
 export class BackgroundComponent implements OnInit {
-  constructor(private key: KeyService, private signature: SignatureService) {
+  constructor(private key: KeyService) {
     (window as any).orbit = {
       requestsMap: {} as { [id: string]: Request }
     };
@@ -40,6 +40,7 @@ export class BackgroundComponent implements OnInit {
       .then(keys =>
         keys.map(key => {
           delete key.mnemonic;
+          delete key.password;
           return key;
         })
       )
@@ -97,6 +98,7 @@ export class BackgroundComponent implements OnInit {
     }
     const privateKey = await this.key.generatePrivateKey(key, password);
     const data = new Buffer(dataHexString, "hex");
-    return this.signature.sign(data, key.signature_type, privateKey);
+    
+    return SignatureAlgorithm.create(key.signature_type).sign(data, privateKey);
   }
 }

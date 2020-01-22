@@ -2,7 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { Request } from "../core/types/request";
 import { KeyService } from "../core/services/key.service";
 import { Key } from "src/app/core/types/key";
-import { SignatureService } from "../core/services/signature.service";
+import { SignatureAlgorithm } from "../core/types/signature-algorithm";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-request",
@@ -15,8 +16,8 @@ export class RequestComponent implements OnInit {
 
   constructor(
     private _key: KeyService,
-    private signature: SignatureService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -35,11 +36,15 @@ export class RequestComponent implements OnInit {
   }
 
   onSubmit(password: string) {
-    if (this.key && this.key.hashed_password) {
-      const hash = this.signature
-        .hash256(new Buffer(password), this.key.signature_type)
+    if (this.key && this.key.password) {
+      const signatureAlgorithm = SignatureAlgorithm.create(
+        this.key.signature_type
+      );
+      const hash = this._key
+        .getPasswordHash(signatureAlgorithm, password, this.key.password.salt)
         .toString("hex");
-      if (hash !== this.key.hashed_password) {
+      if (hash !== this.key.password.hash) {
+        this.snackBar.open("Inalid password", undefined, { duration: 6000 });
         return;
       }
     }

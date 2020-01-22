@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Key } from "../core/types/key";
 import { KeyService } from "../core/services/key.service";
 import { from, Observable } from "rxjs";
-import { SignatureService } from "../core/services/signature.service";
+import { SignatureAlgorithm } from "../core/types/signature-algorithm";
 
 @Component({
   selector: "app-home",
@@ -12,15 +12,15 @@ import { SignatureService } from "../core/services/signature.service";
 export class HomeComponent implements OnInit {
   keys$: Observable<Key[]>;
 
-  constructor(private key: KeyService, private signature: SignatureService) {
+  constructor(private key: KeyService) {
     this.keys$ = from(this.key.all());
   }
 
   ngOnInit() {}
 
   getColorCode(key: Key) {
-    const hash = this.signature
-      .hash256(new Buffer(key.id), key.signature_type)
+    const hash = SignatureAlgorithm.create(key.signature_type)
+      .hash(new Buffer(key.id))
       .toString("hex");
     return `#${hash.substr(0, 6)}`;
   }

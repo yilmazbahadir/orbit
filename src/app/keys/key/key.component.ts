@@ -4,6 +4,7 @@ import { KeyService } from "../../core/services/key.service";
 import { Key, CoinTypes } from "../../core/types/key";
 import { Observable, from } from "rxjs";
 import { map, mergeMap, filter, toArray, first } from "rxjs/operators";
+import { Coin } from 'src/app/core/types/coin';
 
 @Component({
   selector: "app-key",
@@ -48,7 +49,7 @@ export class KeyComponent implements OnInit {
   }
 
   getCoinTypeString(coinType: CoinTypes) {
-    return this.key.getCoinTypeString(coinType);
+    return Coin.create(coinType).getCoinTypeString();
   }
 
   getChangeString(change: number) {

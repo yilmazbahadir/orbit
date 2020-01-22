@@ -7,7 +7,10 @@ export interface Key {
   account: number;
   change: number;
   address_index: number;
-  hashed_password?: string;
+  password?: {
+    hash: string;
+    salt: string;
+  }
 }
 
 export enum SignatureTypes {

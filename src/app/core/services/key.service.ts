@@ -1,21 +1,19 @@
 import { Injectable } from "@angular/core";
-import { Key, CoinTypes } from "../types/key";
+import { Key } from "../types/key";
 import * as bip32 from "bip32";
 import * as bip39 from "bip39";
-import { SignatureService } from "./signature.service";
+import { SignatureAlgorithm } from "../types/signature-algorithm";
 
 @Injectable({
   providedIn: "root"
 })
 export class KeyService {
-  constructor(private signature: SignatureService) {}
+  constructor() {}
 
-  onUpgradeNeeded(event: any) {
-    const db: IDBDatabase = event.target.result;
-    db.createObjectStore("key", { keyPath: "id" });
-  }
-
-  async generatePrivateKey(key: Key, password?: string): Promise<Buffer> {
+  async generatePrivateKey(
+    key: Omit<Key, "public_key">,
+    password?: string
+  ): Promise<Buffer> {
     const seed = await bip39.mnemonicToSeed(key.mnemonic, password);
     const node = bip32.fromSeed(seed);
     const bip44 = `m/44'/${key.coin_type}'/${key.account}'/${key.change}/${key.address_index}`;
@@ -24,21 +22,27 @@ export class KeyService {
     return child.privateKey!;
   }
 
-  async create(key: Omit<Key, "public_key">, password?: string) {
+  async create(key: Omit<Key, "public_key" | "password">, password?: string) {
+    const signatureAlgorithm = SignatureAlgorithm.create(
+      key.signature_type
+    );
+    const privateKey = await this.generatePrivateKey(key, password);
     const _key: Key = {
       ...key,
-      public_key: ""
+      public_key: signatureAlgorithm.getPublicKey(privateKey).toString("hex")
     };
-    if (password) {
-      key.hashed_password = this.signature
-        .hash256(new Buffer(password), key.signature_type)
-        .toString("hex");
-    }
 
-    const privateKey = await this.generatePrivateKey(_key, password);
-    _key.public_key = this.signature
-      .publicKey(key.signature_type, privateKey)
-      .toString("hex");
+    if (password) {
+      const salt = signatureAlgorithm
+        .hash(new Buffer(bip39.generateMnemonic()))
+        .toString("hex");
+      _key.password = {
+        hash: this.getPasswordHash(signatureAlgorithm, password, salt).toString(
+          "hex"
+        ),
+        salt: salt
+      };
+    }
 
     await this.set(_key);
 
@@ -118,19 +122,12 @@ export class KeyService {
     });
   }
 
-  getCoinTypeString(coinType: CoinTypes) {
-    switch (coinType) {
-      case CoinTypes.BITCOIN:
-        return "0 Bitcoin";
-      case CoinTypes.TESTNET:
-        return "1 Testnet for All";
-      case CoinTypes.NEM:
-        return "43 NEM";
-      case CoinTypes.ETHEREUM:
-        return "60 Ethereum";
-      case CoinTypes.COSMOS:
-        return "118 Cosmos";
-    }
+  getPasswordHash(
+    signatureAlgorithm: SignatureAlgorithm,
+    password: string,
+    salt: string
+  ) {
+    return signatureAlgorithm.hash(new Buffer(`${password}${salt}`));
   }
 
   getChangeString(change: number) {
@@ -142,5 +139,10 @@ export class KeyService {
       default:
         return "";
     }
+  }
+
+  private onUpgradeNeeded(event: any) {
+    const db: IDBDatabase = event.target.result;
+    db.createObjectStore("key", { keyPath: "id" });
   }
 }
